@@ -16,7 +16,7 @@ Developers and sub-distributors can browse the full product catalog with rich de
 
 ### Active
 
-- [ ] B2B product catalog with ~20 initial products (homes, modules, accessories)
+- [ ] B2B product catalog with ~20 initial products (modular homes, kit homes, container homes, tiny homes, sheds, accessories)
 - [ ] Rich product pages with floor plans, specs, photo galleries, 3D renders, compliance docs
 - [ ] Selectable product options (finishes, layouts, add-ons) per base model
 - [ ] Price range display ("from $X") with exact pricing via quote
@@ -39,12 +39,18 @@ Developers and sub-distributors can browse the full product catalog with rich de
 
 ## Context
 
+- **Corporate entity**: KwikBuilt Pty Ltd — Australian Pty Ltd registered with ASIC
+- **Directors**: Ms Di Hu (Chairperson, 55% shareholder — supply chain), Mr Geoffrey Shannon (Managing Director, 30% — Australian market & operations)
+- **Technology adviser**: Mr Jieming Hu (15% shareholder, non-director)
+- **Primary customer**: The Dwelling Depot (D & W Shannon Pty Ltd + Di Hu & Jieming Hu Partnership) — authorized Australian national distributor
+- **Product categories**: Modular homes, kit homes, container homes, tiny homes, sheds, and related dwelling products
+- **Supply chain**: KwikBuilt sources and procures from Chinese suppliers, supplies to The Dwelling Depot and other distributors/developers
 - Kwik Built Homes is a new brand with no existing web presence
 - Target market: Australian land developers and sub-distributors building modular housing estates or resort complexes
-- Products are manufactured in China, shipped to Australia
-- Buyers need to see compliance with Australian building standards
+- Buyers need to see compliance with Australian building standards (Corporations Act 2001)
 - The long-term vision includes a full 3D configurator where buyers can customize homes, place them on different terrains (flat, sloped, coastal, bush, resort settings), walk through them, save/share/compare configurations, download renders, and convert directly to quotes. 3D models will need to be created from scratch.
 - Existing codebase is a Next.js app configured for Cloudflare Workers deployment
+- Reference: `./reference/KwikBuilt Pty Ltd — Corporate Structure.pdf`
 
 ## Constraints
 
