@@ -17,14 +17,12 @@ export default async function HomePage() {
     const payload = await getPayloadClient()
     const result = await payload.find({
       collection: 'products',
-      where: {
-        status: { equals: 'active' },
-      },
       sort: 'title',
       limit: 50,
     })
     products = result.docs
-  } catch {
+  } catch (err) {
+    console.error('Homepage Payload error:', err)
     hasError = true
   }
 

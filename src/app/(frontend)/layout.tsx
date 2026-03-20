@@ -17,8 +17,13 @@ export default function FrontendLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-			{children}
-		</div>
+		<html lang="en">
+			<head>
+				<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+			</head>
+			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+				{children}
+			</body>
+		</html>
 	);
 }
