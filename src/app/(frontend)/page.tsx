@@ -32,7 +32,6 @@ export default async function HomePage() {
           collection: 'products',
           where: {
             category: { equals: cat.id },
-            status: { equals: 'active' },
           },
           limit: 0,
           depth: 0,
@@ -50,7 +49,7 @@ export default async function HomePage() {
     // Fetch first 4 active products for featured section
     const productResult = await payload.find({
       collection: 'products',
-      where: { status: { equals: 'active' } },
+      where: {},
       sort: 'title',
       limit: 4,
       depth: 1,
