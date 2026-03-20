@@ -1,11 +1,6 @@
 import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
-
-function formatPrice(from?: number | null, label?: string | null) {
-  if (label) return label
-  if (from) return `from $${from.toLocaleString()} + GST`
-  return 'Contact for pricing'
-}
+import { formatPrice } from '@/lib/format'
 
 export default async function HomePage() {
   let products: Awaited<
