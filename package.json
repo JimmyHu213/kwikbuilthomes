@@ -38,6 +38,7 @@
     "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
+    "sass": "^1.98.0",
     "tailwindcss": "^4",
     "typescript": "^5.7.4",
     "vitest": "^3.2.4"
