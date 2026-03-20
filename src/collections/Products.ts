@@ -46,7 +46,7 @@ export const Products: CollectionConfig = {
             },
             {
               name: 'description',
-              type: 'richText',
+              type: 'textarea',
               label: 'Description',
             },
             {
@@ -93,7 +93,6 @@ export const Products: CollectionConfig = {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
-              required: true,
               label: 'Hero Image',
             },
             {
