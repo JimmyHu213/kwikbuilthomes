@@ -69,7 +69,6 @@ export default async function CategoryPage({ params }: Props) {
       collection: 'products',
       where: {
         category: { equals: categoryDoc.id },
-        status: { equals: 'active' },
       },
       depth: 1,
       sort: 'title',
