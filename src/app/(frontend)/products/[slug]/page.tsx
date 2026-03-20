@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getPayloadClient } from '@/lib/payload'
+import type { Category } from '@/payload-types'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -40,6 +41,7 @@ export default async function ProductPage({ params }: Props) {
       collection: 'products',
       where: { slug: { equals: slug } },
       limit: 1,
+      depth: 1,
     })
     product = result.docs[0]
   } catch {
@@ -89,12 +91,21 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-12">
-      <Link
-        href="/"
-        className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-      >
-        &larr; Back to products
-      </Link>
+      {product.category && typeof product.category === 'object' ? (
+        <Link
+          href={`/categories/${(product.category as Category).slug}`}
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          &larr; Back to {(product.category as Category).title}
+        </Link>
+      ) : (
+        <Link
+          href="/products"
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          &larr; Back to products
+        </Link>
+      )}
 
       {/* Title and excerpt */}
       <header className="mt-6 mb-8">
