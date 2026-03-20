@@ -1,33 +1,73 @@
 import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
-import { formatPrice } from '@/lib/format'
+import { CategoryCard } from './components/category-card'
+import { ProductCard } from './components/product-card'
+import type { Product } from '@/payload-types'
 
 export default async function HomePage() {
-  let products: Awaited<
-    ReturnType<Awaited<ReturnType<typeof getPayloadClient>>['find']>
-  >['docs'] = []
+  let categories: {
+    id: number
+    title: string
+    slug: string
+    description?: string | null
+    productCount: number
+  }[] = []
+  let featuredProducts: Product[] = []
   let hasError = false
 
   try {
     const payload = await getPayloadClient()
-    const result = await payload.find({
-      collection: 'products',
-      sort: 'title',
-      limit: 50,
+
+    // Fetch categories with product counts
+    const categoryResult = await payload.find({
+      collection: 'categories',
+      sort: 'displayOrder',
+      limit: 20,
+      depth: 0,
     })
-    products = result.docs
+
+    categories = await Promise.all(
+      categoryResult.docs.map(async (cat) => {
+        const products = await payload.find({
+          collection: 'products',
+          where: {
+            category: { equals: cat.id },
+            status: { equals: 'active' },
+          },
+          limit: 0,
+          depth: 0,
+        })
+        return {
+          id: cat.id as number,
+          title: cat.title as string,
+          slug: cat.slug as string,
+          description: cat.description as string | null | undefined,
+          productCount: products.totalDocs,
+        }
+      }),
+    )
+
+    // Fetch first 4 active products for featured section
+    const productResult = await payload.find({
+      collection: 'products',
+      where: { status: { equals: 'active' } },
+      sort: 'title',
+      limit: 4,
+      depth: 1,
+    })
+    featuredProducts = productResult.docs as Product[]
   } catch (err) {
     console.error('Homepage Payload error:', err)
     hasError = true
   }
 
   return (
-    <main className="max-w-5xl mx-auto px-6 py-12">
+    <div className="max-w-6xl mx-auto px-6 py-12">
       <header className="mb-12">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
           Kwik Built Homes
         </h1>
-        <p className="mt-3 text-lg text-gray-600">
+        <p className="mt-3 text-lg text-muted-foreground">
           Australian-engineered modular homes for developers, builders, and sub-distributors.
           NCC-compliant, factory-built, site-ready.
         </p>
@@ -45,12 +85,12 @@ export default async function HomePage() {
         </div>
       )}
 
-      {!hasError && products.length === 0 && (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-gray-600">
+      {!hasError && categories.length === 0 && featuredProducts.length === 0 && (
+        <div className="rounded-lg border border-border bg-muted/50 p-6 text-muted-foreground">
           <h2 className="font-semibold">No products available yet</h2>
           <p className="mt-1 text-sm">
             Create products in the{' '}
-            <Link href="/admin" className="text-blue-600 underline">
+            <Link href="/admin" className="text-foreground underline">
               admin panel
             </Link>{' '}
             or run the seed script to get started.
@@ -58,28 +98,51 @@ export default async function HomePage() {
         </div>
       )}
 
-      {products.length > 0 && (
-        <section>
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">Our Products</h2>
-          <div className="grid gap-6 sm:grid-cols-2">
-            {products.map((product) => (
-              <Link
-                key={product.id}
-                href={`/products/${product.slug}`}
-                className="block rounded-lg border border-gray-200 p-6 hover:border-gray-400 hover:shadow-sm transition-all"
-              >
-                <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
-                {product.excerpt && (
-                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">{product.excerpt}</p>
-                )}
-                <p className="mt-3 text-sm font-medium text-gray-900">
-                  {formatPrice(product.priceRange?.from, product.priceRange?.label)}
-                </p>
-              </Link>
+      {/* Categories section */}
+      {categories.length > 0 && (
+        <section className="mb-12">
+          <h2 className="text-xl font-semibold text-foreground mb-6">Browse by Category</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {categories.map((cat) => (
+              <CategoryCard
+                key={cat.id}
+                category={cat}
+                productCount={cat.productCount}
+              />
             ))}
           </div>
         </section>
       )}
-    </main>
+
+      {/* Featured Products section */}
+      {featuredProducts.length > 0 && (
+        <section>
+          <h2 className="text-xl font-semibold text-foreground mb-6">Featured Products</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredProducts.map((product) => {
+              const categorySlug =
+                product.category && typeof product.category === 'object'
+                  ? product.category.slug
+                  : ''
+              return (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  categorySlug={categorySlug}
+                />
+              )
+            })}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/products"
+              className="inline-flex items-center text-sm font-medium text-foreground hover:underline"
+            >
+              View all products &rarr;
+            </Link>
+          </div>
+        </section>
+      )}
+    </div>
   )
 }
