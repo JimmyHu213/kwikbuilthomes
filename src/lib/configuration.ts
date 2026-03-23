@@ -1,4 +1,4 @@
-import type { Media, Product } from '@/payload-types'
+import type { Product } from '@/payload-types'
 import { getMediaUrl, getMediaAlt } from '@/lib/media'
 
 export type OptionCardData = {
