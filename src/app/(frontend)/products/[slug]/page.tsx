@@ -1,8 +1,14 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
+import { FileDown } from 'lucide-react'
 import { getPayloadClient } from '@/lib/payload'
-import type { Category } from '@/payload-types'
+import { getMediaUrl, getMediaAlt } from '@/lib/media'
+import { formatPrice } from '@/lib/format'
+import { PhotoGallery, extractGallerySlides } from '../../components/photo-gallery'
+import type { GallerySlide } from '../../components/photo-gallery'
+import type { Category, Media, Document as PayloadDocument } from '@/payload-types'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -41,12 +47,12 @@ export default async function ProductPage({ params }: Props) {
       collection: 'products',
       where: { slug: { equals: slug } },
       limit: 1,
-      depth: 1,
+      depth: 2,
     })
     product = result.docs[0]
   } catch {
     return (
-      <main className="max-w-3xl mx-auto px-6 py-12">
+      <main className="max-w-4xl mx-auto px-6 py-12">
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-800">
           <h2 className="font-semibold">Database not connected</h2>
           <p className="mt-1 text-sm">
@@ -62,6 +68,23 @@ export default async function ProductPage({ params }: Props) {
 
   if (!product) notFound()
 
+  // --- Data extraction ---
+
+  const heroSrc = getMediaUrl(product.heroImage, 'hero') ?? getMediaUrl(product.heroImage)
+
+  const gallerySlides: GallerySlide[] = extractGallerySlides(product.gallery)
+
+  const floorPlans = (product.floorPlans ?? [])
+    .filter((fp) => fp.image && typeof fp.image === 'object' && (fp.image as Media).url)
+    .map((fp) => {
+      const img = fp.image as Media
+      return {
+        url: img.url!,
+        alt: img.alt ?? product.title,
+        label: fp.label ?? undefined,
+      }
+    })
+
   const specs = {
     bedrooms: product.bedrooms,
     bathrooms: product.bathrooms,
@@ -69,10 +92,17 @@ export default async function ProductPage({ params }: Props) {
     dimensions: product.dimensions,
     weight: product.weight,
     structuralSystem: product.structuralSystem,
+    insulationRating: product.insulationRating,
   }
 
   const hasSpecs =
-    specs.bedrooms || specs.bathrooms || specs.floorArea || specs.dimensions?.length || specs.weight
+    specs.bedrooms != null ||
+    specs.bathrooms != null ||
+    specs.floorArea != null ||
+    (specs.dimensions?.length != null && specs.dimensions?.width != null) ||
+    specs.weight != null ||
+    specs.structuralSystem ||
+    specs.insulationRating
 
   const compliance = {
     nccClassification: product.nccClassification,
@@ -87,10 +117,19 @@ export default async function ProductPage({ params }: Props) {
     compliance.balRating ||
     (compliance.applicableStates && compliance.applicableStates.length > 0)
 
+  const downloadableCerts = (product.certifications ?? []).filter(
+    (cert) => cert.document && typeof cert.document === 'object' && (cert.document as PayloadDocument).url,
+  )
+
   const optionCategories = product.optionCategories ?? []
 
+  const descriptionParagraphs = product.description
+    ? product.description.split('\n\n').filter((p) => p.trim().length > 0)
+    : []
+
   return (
-    <main className="max-w-3xl mx-auto px-6 py-12">
+    <main className="max-w-4xl mx-auto px-6 py-12">
+      {/* Breadcrumb */}
       {product.category && typeof product.category === 'object' ? (
         <Link
           href={`/categories/${(product.category as Category).slug}`}
@@ -107,19 +146,81 @@ export default async function ProductPage({ params }: Props) {
         </Link>
       )}
 
-      {/* Title and excerpt */}
+      {/* Hero Image */}
+      {heroSrc && (
+        <section className="mt-6">
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
+            <Image
+              src={heroSrc}
+              alt={getMediaAlt(product.heroImage)}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Title + Price Header */}
       <header className="mt-6 mb-8">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900">{product.title}</h1>
         {product.excerpt && <p className="mt-3 text-lg text-gray-600">{product.excerpt}</p>}
-        {product.priceRange?.label && (
-          <p className="mt-4 text-xl font-semibold text-gray-900">{product.priceRange.label}</p>
-        )}
-        {!product.priceRange?.label && product.priceRange?.from && (
-          <p className="mt-4 text-xl font-semibold text-gray-900">
-            from ${product.priceRange.from.toLocaleString()} + GST
-          </p>
-        )}
+        <p className="mt-4">
+          <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-lg font-semibold text-primary">
+            {formatPrice(product.priceRange?.from, product.priceRange?.label)}
+          </span>
+        </p>
       </header>
+
+      {/* Description */}
+      {descriptionParagraphs.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Description</h2>
+          <div className="space-y-4">
+            {descriptionParagraphs.map((paragraph, i) => (
+              <p key={i} className="text-gray-600 leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Photo Gallery */}
+      {gallerySlides.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Photo Gallery</h2>
+          <PhotoGallery slides={gallerySlides} />
+        </section>
+      )}
+
+      {/* Floor Plans */}
+      {floorPlans.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Floor Plans</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {floorPlans.map((plan, i) => (
+              <div key={i} className="rounded-lg border border-gray-200 overflow-hidden">
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src={plan.url}
+                    alt={plan.alt}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+                {plan.label && (
+                  <p className="text-sm font-medium text-center py-2 bg-gray-50">
+                    {plan.label}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Specifications */}
       {hasSpecs && (
@@ -184,36 +285,46 @@ export default async function ProductPage({ params }: Props) {
                     <td className="px-4 py-3 text-gray-900">{specs.structuralSystem}</td>
                   </tr>
                 )}
+                {specs.insulationRating && (
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-gray-600 bg-gray-50 w-1/3">
+                      Insulation Rating
+                    </td>
+                    <td className="px-4 py-3 text-gray-900">{specs.insulationRating}</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </section>
       )}
 
-      {/* Compliance */}
-      {hasCompliance && (
+      {/* Compliance & Certification */}
+      {(hasCompliance || downloadableCerts.length > 0) && (
         <section className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Compliance &amp; Certification
           </h2>
           <div className="space-y-4">
-            <div className="flex flex-wrap gap-3">
-              {compliance.nccClassification && (
-                <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 ring-1 ring-blue-200">
-                  NCC Class {compliance.nccClassification}
-                </span>
-              )}
-              {compliance.windRegion && (
-                <span className="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-700 ring-1 ring-green-200">
-                  Wind Region {compliance.windRegion}
-                </span>
-              )}
-              {compliance.balRating && (
-                <span className="inline-flex items-center rounded-full bg-orange-50 px-3 py-1 text-sm font-medium text-orange-700 ring-1 ring-orange-200">
-                  {compliance.balRating}
-                </span>
-              )}
-            </div>
+            {hasCompliance && (
+              <div className="flex flex-wrap gap-3">
+                {compliance.nccClassification && (
+                  <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 ring-1 ring-blue-200">
+                    NCC Class {compliance.nccClassification}
+                  </span>
+                )}
+                {compliance.windRegion && (
+                  <span className="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-sm font-medium text-green-700 ring-1 ring-green-200">
+                    Wind Region {compliance.windRegion}
+                  </span>
+                )}
+                {compliance.balRating && (
+                  <span className="inline-flex items-center rounded-full bg-orange-50 px-3 py-1 text-sm font-medium text-orange-700 ring-1 ring-orange-200">
+                    {compliance.balRating}
+                  </span>
+                )}
+              </div>
+            )}
             {compliance.applicableStates && compliance.applicableStates.length > 0 && (
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-2">Approved states</p>
@@ -229,11 +340,45 @@ export default async function ProductPage({ params }: Props) {
                 </div>
               </div>
             )}
+
+            {/* Certification Documents */}
+            {downloadableCerts.length > 0 && (
+              <div>
+                <h3 className="text-base font-semibold text-gray-700 mb-3">
+                  Certification Documents
+                </h3>
+                <div className="space-y-2">
+                  {downloadableCerts.map((cert) => {
+                    const doc = cert.document as PayloadDocument
+                    return (
+                      <a
+                        key={cert.id ?? cert.name}
+                        href={doc.url!}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 rounded-lg border border-border p-3 hover:bg-muted/50 transition-colors"
+                      >
+                        <FileDown className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
+                        <div>
+                          <span className="text-sm font-medium text-gray-900">{cert.name}</span>
+                          {cert.type && (
+                            <span className="ml-2 text-xs text-muted-foreground">
+                              {cert.type}
+                            </span>
+                          )}
+                        </div>
+                      </a>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </section>
       )}
 
-      {/* Options */}
+      {/* Options & Variants */}
       {optionCategories.length > 0 && (
         <section className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Options &amp; Variants</h2>
