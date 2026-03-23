@@ -7,7 +7,9 @@ import { getPayloadClient } from '@/lib/payload'
 import { getMediaUrl, getMediaAlt } from '@/lib/media'
 import { formatPrice } from '@/lib/format'
 import { PhotoGallery } from '../../components/photo-gallery'
+import { ProductConfigurator } from '../../components/product-configurator'
 import { extractGallerySlides } from '@/lib/gallery'
+import { extractOptionData } from '@/lib/configuration'
 import type { GallerySlide } from '@/lib/gallery'
 import type { Category, Media, Document as PayloadDocument } from '@/payload-types'
 
@@ -122,7 +124,7 @@ export default async function ProductPage({ params }: Props) {
     (cert) => cert.document && typeof cert.document === 'object' && (cert.document as PayloadDocument).url,
   )
 
-  const optionCategories = product.optionCategories ?? []
+  const configData = extractOptionData(product.optionCategories)
 
   const descriptionParagraphs = product.description
     ? product.description.split('\n\n').filter((p) => p.trim().length > 0)
@@ -380,63 +382,14 @@ export default async function ProductPage({ params }: Props) {
       )}
 
       {/* Options & Variants */}
-      {optionCategories.length > 0 && (
+      {configData.length > 0 && (
         <section className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Options &amp; Variants</h2>
-          <div className="space-y-6">
-            {optionCategories.map(
-              (cat: {
-                id?: string | null
-                categoryName: string
-                selectionType?: string | null
-                options?:
-                  | {
-                      id?: string | null
-                      name: string
-                      description?: string | null
-                      priceModifier?: number | null
-                    }[]
-                  | null
-              }) => (
-                <div key={cat.id ?? cat.categoryName}>
-                  <h3 className="text-base font-semibold text-gray-700">
-                    {cat.categoryName}
-                    {cat.selectionType && (
-                      <span className="ml-2 text-xs font-normal text-gray-400">
-                        ({cat.selectionType === 'single' ? 'choose one' : 'choose multiple'})
-                      </span>
-                    )}
-                  </h3>
-                  {cat.options && cat.options.length > 0 && (
-                    <ul className="mt-2 space-y-2">
-                      {cat.options.map((opt) => (
-                        <li
-                          key={opt.id ?? opt.name}
-                          className="rounded border border-gray-200 px-4 py-3"
-                        >
-                          <div className="flex items-baseline justify-between">
-                            <span className="font-medium text-gray-900">{opt.name}</span>
-                            {opt.priceModifier != null && opt.priceModifier !== 0 && (
-                              <span className="text-sm text-gray-500">
-                                {opt.priceModifier > 0 ? '+' : ''}$
-                                {opt.priceModifier.toLocaleString()}
-                              </span>
-                            )}
-                            {opt.priceModifier === 0 && (
-                              <span className="text-sm text-green-600">Included</span>
-                            )}
-                          </div>
-                          {opt.description && (
-                            <p className="mt-1 text-sm text-gray-500">{opt.description}</p>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ),
-            )}
-          </div>
+          <ProductConfigurator
+            categories={configData}
+            basePrice={product.priceRange?.from ?? null}
+            productSlug={slug}
+          />
         </section>
       )}
     </main>
