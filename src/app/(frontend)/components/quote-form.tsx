@@ -30,8 +30,8 @@ const timelineLabels: Record<string, string> = {
 }
 
 const inputClassName =
-  'w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none'
-const labelClassName = 'block text-sm font-medium text-gray-700'
+  'w-full rounded-md border border-border px-3 py-2 text-sm shadow-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none'
+const labelClassName = 'block text-sm font-medium text-foreground/80'
 const errorClassName = 'text-sm text-red-600 mt-1'
 
 export function QuoteForm({
@@ -47,15 +47,15 @@ export function QuoteForm({
   // Success state
   if (state.success) {
     return (
-      <div className="rounded-lg border border-green-200 bg-green-50 p-8 text-center">
-        <CheckCircle2 className="mx-auto h-12 w-12 text-green-600" />
-        <h2 className="mt-4 text-2xl font-semibold text-gray-900">Quote Request Submitted!</h2>
+      <div className="rounded-lg border border-primary/20 bg-primary/5 p-8 text-center">
+        <CheckCircle2 className="mx-auto h-12 w-12 text-primary" />
+        <h2 className="mt-4 text-2xl font-semibold text-foreground">Quote Request Submitted!</h2>
         {state.referenceNumber && (
-          <p className="mt-2 text-sm text-gray-600">
-            Reference number: <strong className="text-gray-900">{state.referenceNumber}</strong>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Reference number: <strong className="text-foreground">{state.referenceNumber}</strong>
           </p>
         )}
-        <p className="mt-3 text-gray-600">
+        <p className="mt-3 text-muted-foreground">
           Our team will review your requirements and respond within 2 business days.
         </p>
         <Link
@@ -85,7 +85,7 @@ export function QuoteForm({
 
       {/* Contact Information */}
       <fieldset>
-        <legend className="text-lg font-semibold text-gray-900 mb-4">Contact Information</legend>
+        <legend className="text-lg font-semibold text-foreground mb-4">Contact Information</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="contactName" className={labelClassName}>
@@ -157,7 +157,7 @@ export function QuoteForm({
 
       {/* Project Details */}
       <fieldset>
-        <legend className="text-lg font-semibold text-gray-900 mb-4">Project Details</legend>
+        <legend className="text-lg font-semibold text-foreground mb-4">Project Details</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="quantity" className={labelClassName}>
@@ -251,7 +251,7 @@ export function QuoteForm({
 
       {/* Estate Inquiry */}
       <fieldset>
-        <legend className="text-lg font-semibold text-gray-900 mb-4">Estate Inquiry</legend>
+        <legend className="text-lg font-semibold text-foreground mb-4">Estate Inquiry</legend>
         <div className="space-y-4">
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -260,9 +260,9 @@ export function QuoteForm({
               value="true"
               checked={isEstateInquiry}
               onChange={(e) => setIsEstateInquiry(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+              className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
             />
-            <span className="text-sm text-gray-700">This is a multi-unit estate inquiry</span>
+            <span className="text-sm text-foreground/80">This is a multi-unit estate inquiry</span>
           </label>
 
           {isEstateInquiry && (
@@ -313,7 +313,7 @@ export function QuoteForm({
 
       {/* Additional Notes */}
       <fieldset>
-        <legend className="text-lg font-semibold text-gray-900 mb-4">Additional Notes</legend>
+        <legend className="text-lg font-semibold text-foreground mb-4">Additional Notes</legend>
         <textarea
           id="additionalNotes"
           name="additionalNotes"

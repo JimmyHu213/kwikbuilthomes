@@ -83,7 +83,7 @@ export default async function CategoryPage({ params }: Props) {
     }
 
     return (
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-800">
           <h2 className="font-semibold">Database not connected</h2>
           <p className="mt-1 text-sm">
@@ -98,16 +98,17 @@ export default async function CategoryPage({ params }: Props) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
+    <div className="max-w-7xl mx-auto px-6 py-16">
       <nav className="text-sm text-muted-foreground mb-6">
-        <Link href="/products" className="hover:text-foreground transition-colors">
+        <Link href="/products" className="hover:text-primary transition-colors">
           Products
         </Link>
         <span className="mx-2">/</span>
         <span className="text-foreground">{categoryDoc!.title}</span>
       </nav>
 
-      <header className="mb-10">
+      <header className="mb-12">
+        <div className="w-12 h-1 bg-primary mb-4" />
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           {categoryDoc!.title}
         </h1>

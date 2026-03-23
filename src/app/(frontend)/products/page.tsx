@@ -55,8 +55,9 @@ export default async function ProductsPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <header className="mb-10">
+    <div className="max-w-7xl mx-auto px-6 py-16">
+      <header className="mb-12">
+        <div className="w-12 h-1 bg-primary mb-4" />
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Our Products</h1>
         <p className="mt-3 text-lg text-muted-foreground">
           Browse our complete range of Australian-engineered modular buildings

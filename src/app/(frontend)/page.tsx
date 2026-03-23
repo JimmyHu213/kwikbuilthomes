@@ -61,87 +61,107 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <header className="mb-12">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Kwik Built Homes
-        </h1>
-        <p className="mt-3 text-lg text-muted-foreground">
-          Australian-engineered modular homes for developers, builders, and sub-distributors.
-          NCC-compliant, factory-built, site-ready.
-        </p>
-      </header>
-
-      {hasError && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-800">
-          <h2 className="font-semibold">Database not connected</h2>
-          <p className="mt-1 text-sm">
-            Add <code className="font-mono bg-amber-100 px-1 rounded">DATABASE_URL</code> and{' '}
-            <code className="font-mono bg-amber-100 px-1 rounded">PAYLOAD_SECRET</code> to your{' '}
-            <code className="font-mono bg-amber-100 px-1 rounded">.env.local</code> file, then
-            restart the dev server.
+    <div>
+      {/* Hero Section */}
+      <section className="bg-[#2D2D2D] py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">
+            Australian-Engineered Modular Homes
+          </h1>
+          <p className="mt-6 text-lg md:text-xl text-[#C8962E] font-medium">
+            Factory-built. Site-ready. NCC-compliant.
           </p>
-        </div>
-      )}
-
-      {!hasError && categories.length === 0 && featuredProducts.length === 0 && (
-        <div className="rounded-lg border border-border bg-muted/50 p-6 text-muted-foreground">
-          <h2 className="font-semibold">No products available yet</h2>
-          <p className="mt-1 text-sm">
-            Create products in the{' '}
-            <Link href="/admin" className="text-foreground underline">
-              admin panel
-            </Link>{' '}
-            or run the seed script to get started.
-          </p>
-        </div>
-      )}
-
-      {/* Categories section */}
-      {categories.length > 0 && (
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold text-foreground mb-6">Browse by Category</h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((cat) => (
-              <CategoryCard
-                key={cat.id}
-                category={cat}
-                productCount={cat.productCount}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Featured Products section */}
-      {featuredProducts.length > 0 && (
-        <section>
-          <h2 className="text-xl font-semibold text-foreground mb-6">Featured Products</h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredProducts.map((product) => {
-              const categorySlug =
-                product.category && typeof product.category === 'object'
-                  ? product.category.slug
-                  : ''
-              return (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  categorySlug={categorySlug}
-                />
-              )
-            })}
-          </div>
-          <div className="mt-8 text-center">
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/products"
-              className="inline-flex items-center text-sm font-medium text-foreground hover:underline"
+              className="inline-flex items-center rounded-full bg-primary px-8 py-3 text-base font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              View all products &rarr;
+              Browse Our Range
+            </Link>
+            <Link
+              href="/products"
+              className="inline-flex items-center rounded-full border-2 border-white px-8 py-3 text-base font-medium text-white hover:bg-white/10 transition-colors"
+            >
+              Request a Quote
             </Link>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {hasError && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-800">
+            <h2 className="font-semibold">Database not connected</h2>
+            <p className="mt-1 text-sm">
+              Add <code className="font-mono bg-amber-100 px-1 rounded">DATABASE_URL</code> and{' '}
+              <code className="font-mono bg-amber-100 px-1 rounded">PAYLOAD_SECRET</code> to your{' '}
+              <code className="font-mono bg-amber-100 px-1 rounded">.env.local</code> file, then
+              restart the dev server.
+            </p>
+          </div>
+        )}
+
+        {!hasError && categories.length === 0 && featuredProducts.length === 0 && (
+          <div className="rounded-lg border border-border bg-muted/50 p-6 text-muted-foreground">
+            <h2 className="font-semibold">No products available yet</h2>
+            <p className="mt-1 text-sm">
+              Create products in the{' '}
+              <Link href="/admin" className="text-foreground underline">
+                admin panel
+              </Link>{' '}
+              or run the seed script to get started.
+            </p>
+          </div>
+        )}
+
+        {/* Categories section */}
+        {categories.length > 0 && (
+          <section className="mb-16">
+            <div className="w-12 h-1 bg-primary mb-4" />
+            <h2 className="text-2xl font-semibold text-foreground mb-8">Browse by Category</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {categories.map((cat) => (
+                <CategoryCard
+                  key={cat.id}
+                  category={cat}
+                  productCount={cat.productCount}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Featured Products section */}
+        {featuredProducts.length > 0 && (
+          <section>
+            <div className="w-12 h-1 bg-primary mb-4" />
+            <h2 className="text-2xl font-semibold text-foreground mb-8">Featured Products</h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredProducts.map((product) => {
+                const categorySlug =
+                  product.category && typeof product.category === 'object'
+                    ? product.category.slug
+                    : ''
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    categorySlug={categorySlug}
+                  />
+                )
+              })}
+            </div>
+            <div className="mt-10 text-center">
+              <Link
+                href="/products"
+                className="inline-flex items-center rounded-full border border-border px-6 py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+              >
+                View all products &rarr;
+              </Link>
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   )
 }

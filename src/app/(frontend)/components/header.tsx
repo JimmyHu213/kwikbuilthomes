@@ -23,16 +23,18 @@ export async function Header() {
   }
 
   return (
-    <header className="border-b border-border bg-background">
-      <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          Kwik Built Homes
+    <header className="border-b border-border bg-white">
+      <nav className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <Link href="/" className="flex items-baseline gap-0.5 tracking-tight">
+          <span className="text-xl font-bold text-foreground">KWIK</span>
+          <span className="text-xl font-bold text-primary">BUILT</span>
+          <span className="ml-1.5 text-sm font-medium text-muted-foreground">HOMES</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
           <Link
             href="/products"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
           >
             All Products
           </Link>
@@ -40,11 +42,17 @@ export async function Header() {
             <Link
               key={cat.id}
               href={`/categories/${cat.slug}`}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
             >
               {cat.title}
             </Link>
           ))}
+          <Link
+            href="/products"
+            className="inline-flex items-center rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            Request a Quote
+          </Link>
         </div>
 
         <div className="md:hidden">
