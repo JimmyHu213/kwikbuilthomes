@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { extractGallerySlides } from '@/app/(frontend)/components/photo-gallery'
+import { extractGallerySlides } from '@/lib/gallery'
 import type { Media, Product } from '@/payload-types'
 
 const mockMedia = (overrides: Partial<Media> = {}): Media => ({
