@@ -6,8 +6,9 @@ import { FileDown } from 'lucide-react'
 import { getPayloadClient } from '@/lib/payload'
 import { getMediaUrl, getMediaAlt } from '@/lib/media'
 import { formatPrice } from '@/lib/format'
-import { PhotoGallery, extractGallerySlides } from '../../components/photo-gallery'
-import type { GallerySlide } from '../../components/photo-gallery'
+import { PhotoGallery } from '../../components/photo-gallery'
+import { extractGallerySlides } from '@/lib/gallery'
+import type { GallerySlide } from '@/lib/gallery'
 import type { Category, Media, Document as PayloadDocument } from '@/payload-types'
 
 type Props = {
