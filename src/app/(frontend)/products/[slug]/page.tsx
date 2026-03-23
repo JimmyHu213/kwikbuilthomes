@@ -55,7 +55,7 @@ export default async function ProductPage({ params }: Props) {
     product = result.docs[0]
   } catch {
     return (
-      <main className="max-w-4xl mx-auto px-6 py-12">
+      <main className="max-w-5xl mx-auto px-6 py-16">
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-800">
           <h2 className="font-semibold">Database not connected</h2>
           <p className="mt-1 text-sm">
@@ -131,19 +131,19 @@ export default async function ProductPage({ params }: Props) {
     : []
 
   return (
-    <main className="max-w-4xl mx-auto px-6 py-12">
+    <main className="max-w-5xl mx-auto px-6 py-16">
       {/* Breadcrumb */}
       {product.category && typeof product.category === 'object' ? (
         <Link
           href={`/categories/${(product.category as Category).slug}`}
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="text-sm text-muted-foreground hover:text-primary transition-colors"
         >
           &larr; Back to {(product.category as Category).title}
         </Link>
       ) : (
         <Link
           href="/products"
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="text-sm text-muted-foreground hover:text-primary transition-colors"
         >
           &larr; Back to products
         </Link>
@@ -152,7 +152,7 @@ export default async function ProductPage({ params }: Props) {
       {/* Hero Image */}
       {heroSrc && (
         <section className="mt-6">
-          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-md">
             <Image
               src={heroSrc}
               alt={getMediaAlt(product.heroImage)}
@@ -167,10 +167,10 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Title + Price Header */}
       <header className="mt-6 mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">{product.title}</h1>
-        {product.excerpt && <p className="mt-3 text-lg text-gray-600">{product.excerpt}</p>}
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">{product.title}</h1>
+        {product.excerpt && <p className="mt-3 text-lg text-muted-foreground">{product.excerpt}</p>}
         <p className="mt-4">
-          <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-lg font-semibold text-primary">
+          <span className="inline-block rounded-full bg-primary px-4 py-1.5 text-lg font-semibold text-white">
             {formatPrice(product.priceRange?.from, product.priceRange?.label)}
           </span>
         </p>
@@ -179,10 +179,11 @@ export default async function ProductPage({ params }: Props) {
       {/* Description */}
       {descriptionParagraphs.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Description</h2>
+          <div className="w-8 h-0.5 bg-primary mb-3" />
+          <h2 className="text-xl font-semibold text-foreground mb-4">Description</h2>
           <div className="space-y-4">
             {descriptionParagraphs.map((paragraph, i) => (
-              <p key={i} className="text-gray-600 leading-relaxed">
+              <p key={i} className="text-muted-foreground leading-relaxed">
                 {paragraph}
               </p>
             ))}
@@ -193,7 +194,8 @@ export default async function ProductPage({ params }: Props) {
       {/* Photo Gallery */}
       {gallerySlides.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Photo Gallery</h2>
+          <div className="w-8 h-0.5 bg-primary mb-3" />
+          <h2 className="text-xl font-semibold text-foreground mb-4">Photo Gallery</h2>
           <PhotoGallery slides={gallerySlides} />
         </section>
       )}
@@ -201,10 +203,11 @@ export default async function ProductPage({ params }: Props) {
       {/* Floor Plans */}
       {floorPlans.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Floor Plans</h2>
+          <div className="w-8 h-0.5 bg-primary mb-3" />
+          <h2 className="text-xl font-semibold text-foreground mb-4">Floor Plans</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {floorPlans.map((plan, i) => (
-              <div key={i} className="rounded-lg border border-gray-200 overflow-hidden">
+              <div key={i} className="rounded-xl border border-border overflow-hidden">
                 <div className="relative aspect-[4/3]">
                   <Image
                     src={plan.url}
@@ -215,7 +218,7 @@ export default async function ProductPage({ params }: Props) {
                   />
                 </div>
                 {plan.label && (
-                  <p className="text-sm font-medium text-center py-2 bg-gray-50">
+                  <p className="text-sm font-medium text-center py-2 bg-secondary">
                     {plan.label}
                   </p>
                 )}
@@ -228,41 +231,42 @@ export default async function ProductPage({ params }: Props) {
       {/* Specifications */}
       {hasSpecs && (
         <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Specifications</h2>
-          <div className="rounded-lg border border-gray-200 overflow-hidden">
+          <div className="w-8 h-0.5 bg-primary mb-3" />
+          <h2 className="text-xl font-semibold text-foreground mb-4">Specifications</h2>
+          <div className="rounded-lg border border-border overflow-hidden">
             <table className="w-full text-sm">
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-border">
                 {specs.bedrooms != null && (
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-600 bg-gray-50 w-1/3">
+                    <td className="px-4 py-3 font-medium text-muted-foreground bg-secondary w-1/3">
                       Bedrooms
                     </td>
-                    <td className="px-4 py-3 text-gray-900">{specs.bedrooms}</td>
+                    <td className="px-4 py-3 text-foreground">{specs.bedrooms}</td>
                   </tr>
                 )}
                 {specs.bathrooms != null && (
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-600 bg-gray-50 w-1/3">
+                    <td className="px-4 py-3 font-medium text-muted-foreground bg-secondary w-1/3">
                       Bathrooms
                     </td>
-                    <td className="px-4 py-3 text-gray-900">{specs.bathrooms}</td>
+                    <td className="px-4 py-3 text-foreground">{specs.bathrooms}</td>
                   </tr>
                 )}
                 {specs.floorArea != null && (
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-600 bg-gray-50 w-1/3">
+                    <td className="px-4 py-3 font-medium text-muted-foreground bg-secondary w-1/3">
                       Floor Area
                     </td>
-                    <td className="px-4 py-3 text-gray-900">{specs.floorArea} m&sup2;</td>
+                    <td className="px-4 py-3 text-foreground">{specs.floorArea} m&sup2;</td>
                   </tr>
                 )}
                 {specs.dimensions?.length != null &&
                   specs.dimensions?.width != null && (
                     <tr>
-                      <td className="px-4 py-3 font-medium text-gray-600 bg-gray-50 w-1/3">
+                      <td className="px-4 py-3 font-medium text-muted-foreground bg-secondary w-1/3">
                         Dimensions (L x W x H)
                       </td>
-                      <td className="px-4 py-3 text-gray-900">
+                      <td className="px-4 py-3 text-foreground">
                         {(specs.dimensions.length / 1000).toFixed(1)}m x{' '}
                         {(specs.dimensions.width / 1000).toFixed(1)}m
                         {specs.dimensions.height != null &&
@@ -272,28 +276,28 @@ export default async function ProductPage({ params }: Props) {
                   )}
                 {specs.weight != null && (
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-600 bg-gray-50 w-1/3">
+                    <td className="px-4 py-3 font-medium text-muted-foreground bg-secondary w-1/3">
                       Transport Weight
                     </td>
-                    <td className="px-4 py-3 text-gray-900">
+                    <td className="px-4 py-3 text-foreground">
                       {specs.weight.toLocaleString()} kg
                     </td>
                   </tr>
                 )}
                 {specs.structuralSystem && (
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-600 bg-gray-50 w-1/3">
+                    <td className="px-4 py-3 font-medium text-muted-foreground bg-secondary w-1/3">
                       Structural System
                     </td>
-                    <td className="px-4 py-3 text-gray-900">{specs.structuralSystem}</td>
+                    <td className="px-4 py-3 text-foreground">{specs.structuralSystem}</td>
                   </tr>
                 )}
                 {specs.insulationRating && (
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-600 bg-gray-50 w-1/3">
+                    <td className="px-4 py-3 font-medium text-muted-foreground bg-secondary w-1/3">
                       Insulation Rating
                     </td>
-                    <td className="px-4 py-3 text-gray-900">{specs.insulationRating}</td>
+                    <td className="px-4 py-3 text-foreground">{specs.insulationRating}</td>
                   </tr>
                 )}
               </tbody>
@@ -305,7 +309,8 @@ export default async function ProductPage({ params }: Props) {
       {/* Compliance & Certification */}
       {(hasCompliance || downloadableCerts.length > 0) && (
         <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="w-8 h-0.5 bg-primary mb-3" />
+          <h2 className="text-xl font-semibold text-foreground mb-4">
             Compliance &amp; Certification
           </h2>
           <div className="space-y-4">
@@ -330,12 +335,12 @@ export default async function ProductPage({ params }: Props) {
             )}
             {compliance.applicableStates && compliance.applicableStates.length > 0 && (
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-2">Approved states</p>
+                <p className="text-sm font-medium text-muted-foreground mb-2">Approved states</p>
                 <div className="flex flex-wrap gap-2">
                   {compliance.applicableStates.map((state: string) => (
                     <span
                       key={state}
-                      className="inline-flex items-center rounded bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700"
+                      className="inline-flex items-center rounded bg-secondary px-2.5 py-0.5 text-xs font-medium text-foreground"
                     >
                       {state}
                     </span>
@@ -347,7 +352,7 @@ export default async function ProductPage({ params }: Props) {
             {/* Certification Documents */}
             {downloadableCerts.length > 0 && (
               <div>
-                <h3 className="text-base font-semibold text-gray-700 mb-3">
+                <h3 className="text-base font-semibold text-foreground mb-3">
                   Certification Documents
                 </h3>
                 <div className="space-y-2">
@@ -364,7 +369,7 @@ export default async function ProductPage({ params }: Props) {
                       >
                         <FileDown className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
                         <div>
-                          <span className="text-sm font-medium text-gray-900">{cert.name}</span>
+                          <span className="text-sm font-medium text-foreground">{cert.name}</span>
                           {cert.type && (
                             <span className="ml-2 text-xs text-muted-foreground">
                               {cert.type}
@@ -384,7 +389,8 @@ export default async function ProductPage({ params }: Props) {
       {/* Options & Variants */}
       {configData.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Options &amp; Variants</h2>
+          <div className="w-8 h-0.5 bg-primary mb-3" />
+          <h2 className="text-xl font-semibold text-foreground mb-4">Options &amp; Variants</h2>
           <ProductConfigurator
             categories={configData}
             basePrice={product.priceRange?.from ?? null}

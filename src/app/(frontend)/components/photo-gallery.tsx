@@ -26,7 +26,7 @@ export function PhotoGallery({ slides }: PhotoGalleryProps) {
           <button
             key={slide.src}
             type="button"
-            className="overflow-hidden rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+            className="overflow-hidden rounded-xl focus:outline-none focus:ring-2 focus:ring-ring"
             onClick={() => {
               setIndex(i)
               setOpen(true)
@@ -35,7 +35,7 @@ export function PhotoGallery({ slides }: PhotoGalleryProps) {
             <img
               src={slide.src}
               alt={slide.alt}
-              className="aspect-[4/3] w-full object-cover transition-transform hover:scale-105"
+              className="aspect-[4/3] w-full object-cover transition-transform duration-500 hover:scale-105"
             />
           </button>
         ))}

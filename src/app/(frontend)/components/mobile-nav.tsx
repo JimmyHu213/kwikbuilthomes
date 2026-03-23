@@ -27,19 +27,23 @@ export function MobileNav({ categories }: MobileNavProps) {
         </Button>
       </SheetTrigger>
       <SheetContent side="left">
-        <SheetTitle>Navigation</SheetTitle>
+        <SheetTitle>
+          <span className="text-lg font-bold text-foreground">KWIK</span>
+          <span className="text-lg font-bold text-primary">BUILT</span>
+          <span className="ml-1 text-xs font-medium text-muted-foreground">HOMES</span>
+        </SheetTitle>
         <nav className="flex flex-col gap-1 mt-4">
           <Link
             href="/"
             onClick={() => setOpen(false)}
-            className="text-base py-2 text-muted-foreground hover:text-foreground transition-colors"
+            className="text-base py-3 text-foreground/70 hover:text-primary transition-colors"
           >
             Home
           </Link>
           <Link
             href="/products"
             onClick={() => setOpen(false)}
-            className="text-base py-2 text-muted-foreground hover:text-foreground transition-colors"
+            className="text-base py-3 text-foreground/70 hover:text-primary transition-colors"
           >
             All Products
           </Link>
@@ -49,11 +53,19 @@ export function MobileNav({ categories }: MobileNavProps) {
               key={cat.id}
               href={`/categories/${cat.slug}`}
               onClick={() => setOpen(false)}
-              className="text-base py-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base py-3 text-foreground/70 hover:text-primary transition-colors"
             >
               {cat.title}
             </Link>
           ))}
+          <div className="h-px bg-border my-2" />
+          <Link
+            href="/products"
+            onClick={() => setOpen(false)}
+            className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors w-full mt-2"
+          >
+            Request a Quote
+          </Link>
         </nav>
       </SheetContent>
     </Sheet>

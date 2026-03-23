@@ -107,9 +107,9 @@ export function ProductConfigurator({
       {/* Category sections */}
       {categories.map((category) => (
         <div key={category.id}>
-          <h3 className="text-base font-semibold text-gray-700 mb-3">
+          <h3 className="text-base font-semibold text-foreground mb-3">
             {category.categoryName}
-            <span className="ml-2 text-xs font-normal text-gray-400">
+            <span className="ml-2 text-xs font-normal text-muted-foreground">
               ({category.selectionType === 'single' ? 'choose one' : 'choose multiple'})
             </span>
           </h3>
@@ -128,7 +128,7 @@ export function ProductConfigurator({
                     'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                     selected
                       ? 'border-primary ring-2 ring-primary/20'
-                      : 'border-gray-200 hover:border-gray-300',
+                      : 'border-border hover:border-primary/30',
                   )}
                 >
                   {/* Selection indicator */}
@@ -138,7 +138,7 @@ export function ProductConfigurator({
                       category.selectionType === 'single' ? 'h-5 w-5' : 'h-5 w-5',
                       selected
                         ? 'bg-primary text-primary-foreground'
-                        : 'border-2 border-gray-300 bg-white',
+                        : 'border-2 border-muted-foreground/30 bg-white',
                       category.selectionType === 'single' ? 'rounded-full' : 'rounded-sm',
                     )}
                   >
@@ -164,10 +164,10 @@ export function ProductConfigurator({
 
                   {/* Card content */}
                   <div className="flex flex-col gap-1 p-3">
-                    <span className="font-medium text-gray-900">{option.name}</span>
+                    <span className="font-medium text-foreground">{option.name}</span>
 
                     {option.description && (
-                      <span className="text-sm text-gray-500 line-clamp-2">
+                      <span className="text-sm text-muted-foreground line-clamp-2">
                         {option.description}
                       </span>
                     )}
@@ -178,7 +178,7 @@ export function ProductConfigurator({
                         Included
                       </span>
                     ) : (
-                      <span className="mt-1 text-sm font-medium text-gray-700">
+                      <span className="mt-1 text-sm font-medium text-foreground">
                         +${option.priceModifier.toLocaleString()}
                       </span>
                     )}
@@ -192,8 +192,8 @@ export function ProductConfigurator({
 
       {/* Configuration summary - only shown after first selection */}
       {anySelected && (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Configuration</h3>
+        <div className="rounded-lg border border-border bg-secondary p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Your Configuration</h3>
 
           <div className="space-y-3">
             {categories
@@ -205,13 +205,13 @@ export function ProductConfigurator({
                     key={category.id}
                     className="flex items-start justify-between gap-4 text-sm"
                   >
-                    <span className="font-medium text-gray-600">{category.categoryName}</span>
+                    <span className="font-medium text-muted-foreground">{category.categoryName}</span>
                     <div className="text-right">
                       {selectedOptions.map((opt) => (
-                        <div key={opt.id} className="text-gray-900">
+                        <div key={opt.id} className="text-foreground">
                           {opt.name}
                           {opt.priceModifier != null && opt.priceModifier !== 0 && (
-                            <span className="ml-2 text-gray-500">
+                            <span className="ml-2 text-muted-foreground">
                               +${opt.priceModifier.toLocaleString()}
                             </span>
                           )}
@@ -228,10 +228,10 @@ export function ProductConfigurator({
 
           {/* Running total */}
           {basePrice != null && (
-            <div className="mt-4 border-t border-gray-200 pt-4">
+            <div className="mt-4 border-t border-border pt-4">
               <div className="flex items-baseline justify-between">
-                <span className="text-sm font-medium text-gray-600">Estimated total</span>
-                <span className="text-lg font-semibold text-gray-900">
+                <span className="text-sm font-medium text-muted-foreground">Estimated total</span>
+                <span className="text-lg font-semibold text-foreground">
                   from ${(basePrice + modifierTotal).toLocaleString()} + GST
                 </span>
               </div>
@@ -240,7 +240,7 @@ export function ProductConfigurator({
 
           {/* Gentle prompt for missing single-choice selections */}
           {missingSingleChoices && (
-            <p className="mt-4 text-sm text-gray-500">
+            <p className="mt-4 text-sm text-muted-foreground">
               You haven&apos;t selected options for all categories &mdash; that&apos;s OK, we can
               discuss during the quote process.
             </p>
