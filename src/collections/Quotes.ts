@@ -28,6 +28,16 @@ export const Quotes: CollectionConfig = {
               admin: { readOnly: true },
             },
             {
+              name: 'source',
+              type: 'select',
+              defaultValue: 'product-page',
+              options: [
+                { label: 'Product Page', value: 'product-page' },
+                { label: 'Site Planner', value: 'planner' },
+              ],
+              admin: { description: 'Where this quote originated' },
+            },
+            {
               name: 'status',
               type: 'select',
               defaultValue: 'new',
@@ -48,22 +58,46 @@ export const Quotes: CollectionConfig = {
               name: 'product',
               type: 'relationship',
               relationTo: 'products',
+              admin: { condition: (data) => !data.source || data.source === 'product-page' },
             },
             {
               name: 'productTitle',
               type: 'text',
-              required: true,
-              admin: { description: 'Snapshot of product title at time of quote' },
+              admin: {
+                description: 'Snapshot of product title at time of quote',
+                condition: (data) => !data.source || data.source === 'product-page',
+              },
             },
             {
               name: 'productSlug',
               type: 'text',
-              required: true,
+              admin: { condition: (data) => !data.source || data.source === 'product-page' },
             },
             {
               name: 'selectedOptions',
               type: 'json',
-              admin: { description: 'JSON snapshot of selected configuration options' },
+              admin: {
+                description: 'JSON snapshot of selected configuration options',
+                condition: (data) => !data.source || data.source === 'product-page',
+              },
+            },
+            {
+              name: 'layoutData',
+              type: 'json',
+              admin: {
+                description: 'BOM array: { productId, productTitle, quantity, dimensions, floorArea }[]',
+                condition: (data) => data.source === 'planner',
+              },
+            },
+            {
+              name: 'layoutScreenshot',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Layout Screenshot',
+              admin: {
+                description: '3D layout screenshot from Site Planner',
+                condition: (data) => data.source === 'planner',
+              },
             },
           ],
         },
