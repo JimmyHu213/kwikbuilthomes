@@ -7,6 +7,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { getMediaUrl, getMediaAlt } from '@/lib/media'
 import { formatPrice } from '@/lib/format'
 import { PhotoGallery } from '../../components/photo-gallery'
+import { ProductPreviewModal } from '../../components/product-preview-modal'
 import { ProductConfigurator } from '../../components/product-configurator'
 import { extractGallerySlides } from '@/lib/gallery'
 import { extractOptionData } from '@/lib/configuration'
@@ -174,6 +175,11 @@ export default async function ProductPage({ params }: Props) {
             {formatPrice(product.priceRange?.from, product.priceRange?.label)}
           </span>
         </p>
+        {product.sceneTemplate && (
+          <div className="mt-4">
+            <ProductPreviewModal slug={slug} title={product.title} />
+          </div>
+        )}
       </header>
 
       {/* Description */}
