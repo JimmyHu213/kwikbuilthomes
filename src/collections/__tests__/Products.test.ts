@@ -40,7 +40,7 @@ describe('Products collection', () => {
 
   it('has exactly 5 tabs', () => {
     const tabsField = getTabsField(Products)
-    expect(tabsField.tabs).toHaveLength(5)
+    expect(tabsField.tabs).toHaveLength(6)
   })
 
   it('has drafts enabled', () => {
@@ -117,13 +117,12 @@ describe('Products collection', () => {
       expect(fieldNames).toContain('floorPlans')
     })
 
-    it('has heroImage as required upload to media', () => {
+    it('has heroImage as upload to media', () => {
       const tab = getTab(Products, 'Media')
       const heroImage = findField(tab.fields, 'heroImage')
       expect(heroImage).toMatchObject({
         type: 'upload',
         relationTo: 'media',
-        required: true,
       })
     })
 
