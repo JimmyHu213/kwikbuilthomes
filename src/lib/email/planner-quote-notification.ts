@@ -1,3 +1,5 @@
+import { escapeHtml } from './utils'
+
 type PlannerNotificationData = {
   referenceNumber: string
   contactName: string
@@ -25,9 +27,9 @@ export function buildPlannerAdminNotificationEmail(data: PlannerNotificationData
     .map(
       (item) => `
       <tr>
-        <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${item.productTitle}</td>
+        <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(item.productTitle)}</td>
         <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333; text-align: center;">${item.quantity}</td>
-        <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${item.dimensions}</td>
+        <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(item.dimensions)}</td>
         <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333; text-align: right;">${item.floorArea != null ? `${item.floorArea * item.quantity} m\u00B2` : 'N/A'}</td>
       </tr>`,
     )
@@ -38,14 +40,14 @@ export function buildPlannerAdminNotificationEmail(data: PlannerNotificationData
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 16px;">Site Planner Quote Request</h1>
-        <p style="color: #333; font-size: 16px;">Reference <strong>${data.referenceNumber}</strong> — submitted from Site Planner.</p>
+        <p style="color: #333; font-size: 16px;">Reference <strong>${escapeHtml(data.referenceNumber)}</strong> — submitted from Site Planner.</p>
         <h3 style="color: #1a1a1a; font-size: 16px; margin-top: 24px;">Contact Details</h3>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
-          <tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Name</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.contactName}</td></tr>
-          <tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Email</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.contactEmail}</td></tr>
-          ${data.contactPhone ? `<tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Phone</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.contactPhone}</td></tr>` : ''}
-          ${data.company ? `<tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Company</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.company}</td></tr>` : ''}
-          <tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Delivery State</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.deliveryState}</td></tr>
+          <tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Name</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.contactName)}</td></tr>
+          <tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Email</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.contactEmail)}</td></tr>
+          ${data.contactPhone ? `<tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Phone</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.contactPhone)}</td></tr>` : ''}
+          ${data.company ? `<tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Company</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.company)}</td></tr>` : ''}
+          <tr><td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Delivery State</td><td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.deliveryState)}</td></tr>
         </table>
         <h3 style="color: #1a1a1a; font-size: 16px; margin-top: 24px;">Layout — Bill of Materials</h3>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">

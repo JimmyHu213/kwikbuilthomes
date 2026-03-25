@@ -1,7 +1,7 @@
 export type PlannerTool = 'select' | 'move' | 'rotate' | 'delete'
 
 export type PlacingProduct = {
-  productId: number
+  productId: number | string
   slug: string
   title: string
   sceneTemplate: SceneTemplate
@@ -15,7 +15,7 @@ export type SceneTemplate = {
 export type PlannedModule = {
   /** The root node ID in the scene store */
   rootNodeId: string
-  productId: number
+  productId: number | string
   productTitle: string
   productSlug: string
   floorArea: number | null
@@ -24,7 +24,7 @@ export type PlannedModule = {
 }
 
 export type BomLineItem = {
-  productId: number
+  productId: number | string
   productTitle: string
   productSlug: string
   quantity: number
@@ -42,7 +42,7 @@ export type LayoutBom = {
 }
 
 export type ProductForPlanner = {
-  id: number
+  id: number | string
   title: string
   slug: string
   dimensions: { length?: number | null; width?: number | null; height?: number | null } | null

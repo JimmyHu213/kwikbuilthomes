@@ -48,7 +48,7 @@ export const quoteFormSchema = z.object({
   // Project details
   quantity: z.coerce.number().int().min(1, 'Quantity must be at least 1'),
   deliveryState: z.enum(australianStates, {
-    errorMap: () => ({ message: 'Please select a delivery state' }),
+    error: 'Please select a delivery state',
   }),
   deliveryLocation: z.string().optional(),
   projectTimeline: z.enum(timelineOptions).optional(),
