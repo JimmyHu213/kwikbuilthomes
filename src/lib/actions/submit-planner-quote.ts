@@ -45,7 +45,7 @@ export async function submitPlannerQuote(
     const payload = await getPayloadClient()
     const referenceNumber = `KBH-${String(Date.now()).slice(-8)}`
 
-    let screenshotId: number | undefined
+    let screenshotId: number | string | undefined
     const screenshotData = formData.get('screenshot')
     if (screenshotData && typeof screenshotData === 'string' && screenshotData.startsWith('data:')) {
       try {

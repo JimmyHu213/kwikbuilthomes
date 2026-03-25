@@ -24,7 +24,7 @@ export const plannerQuoteFormSchema = z.object({
   contactPhone: z.string().optional(),
   company: z.string().optional(),
   deliveryState: z.enum(australianStates, {
-    errorMap: () => ({ message: 'Please select a delivery state' }),
+    error: 'Please select a delivery state',
   }),
   deliveryLocation: z.string().optional(),
   projectTimeline: z.enum(timelineOptions).optional(),

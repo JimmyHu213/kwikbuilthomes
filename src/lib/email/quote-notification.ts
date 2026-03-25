@@ -1,3 +1,5 @@
+import { escapeHtml } from './utils'
+
 /**
  * Build admin notification email HTML and subject line.
  *
@@ -24,8 +26,8 @@ export function buildAdminNotificationEmail(data: {
             .map(
               ([category, options]) => `
               <tr>
-                <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">${category}</td>
-                <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${options.join(', ')}</td>
+                <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">${escapeHtml(category)}</td>
+                <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${options.map(escapeHtml).join(', ')}</td>
               </tr>`,
             )
             .join('')}
@@ -39,28 +41,28 @@ export function buildAdminNotificationEmail(data: {
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 16px;">New Quote Request</h1>
         <p style="color: #333; font-size: 16px;">
-          A new quote request has been submitted with reference <strong>${data.referenceNumber}</strong>.
+          A new quote request has been submitted with reference <strong>${escapeHtml(data.referenceNumber)}</strong>.
         </p>
 
         <h3 style="color: #1a1a1a; font-size: 16px; margin-top: 24px;">Contact Details</h3>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
           <tr>
             <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Name</td>
-            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.contactName}</td>
+            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.contactName)}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Email</td>
-            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.contactEmail}</td>
+            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.contactEmail)}</td>
           </tr>
           ${data.contactPhone ? `
           <tr>
             <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Phone</td>
-            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.contactPhone}</td>
+            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.contactPhone)}</td>
           </tr>` : ''}
           ${data.company ? `
           <tr>
             <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Company</td>
-            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.company}</td>
+            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.company)}</td>
           </tr>` : ''}
         </table>
 
@@ -68,7 +70,7 @@ export function buildAdminNotificationEmail(data: {
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
           <tr>
             <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Product</td>
-            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.productTitle}</td>
+            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.productTitle)}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Quantity</td>
@@ -76,12 +78,12 @@ export function buildAdminNotificationEmail(data: {
           </tr>
           <tr>
             <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Delivery State</td>
-            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.deliveryState}</td>
+            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.deliveryState)}</td>
           </tr>
           ${data.projectTimeline ? `
           <tr>
             <td style="padding: 8px; border: 1px solid #e5e5e5; font-weight: bold; color: #333;">Timeline</td>
-            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${data.projectTimeline}</td>
+            <td style="padding: 8px; border: 1px solid #e5e5e5; color: #333;">${escapeHtml(data.projectTimeline)}</td>
           </tr>` : ''}
         </table>
 
