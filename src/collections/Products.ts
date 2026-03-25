@@ -213,6 +213,30 @@ export const Products: CollectionConfig = {
             },
           ],
         },
+        {
+          label: '3D Template',
+          fields: [
+            {
+              name: 'sceneTemplate',
+              type: 'json',
+              label: 'Scene Template',
+              admin: {
+                description:
+                  'Exported scene graph from Pascal Editor. Upload the JSON file contents here.',
+              },
+            },
+            {
+              name: 'templateThumbnail',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Template Thumbnail',
+              admin: {
+                description:
+                  '2D preview image of the module for the Site Planner sidebar (400x300 recommended)',
+              },
+            },
+          ],
+        },
       ],
     },
   ],
