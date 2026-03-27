@@ -1,1 +1,108 @@
-/* Custom admin styles - add overrides here */
+/* KwikBuilt Homes — Admin Panel Branding */
+
+:root {
+  /* Override Payload's theme colors with KwikBuilt brand */
+  --theme-success-500: #C8962E;
+  --theme-success-400: #d4a94e;
+  --theme-text: #2D2D2D;
+  --nav-width: 280px;
+}
+
+/* Light mode overrides */
+[data-theme="light"] {
+  --theme-bg: #F5F3F0;
+  --theme-elevation-0: #F5F3F0;
+  --theme-elevation-50: #F0EDE8;
+  --theme-elevation-100: #E7E0D8;
+  --theme-elevation-150: #ddd5cb;
+  --theme-elevation-200: #d4c9bd;
+  --theme-elevation-250: #cbbeb0;
+  --theme-elevation-300: #c2b3a3;
+  --theme-elevation-350: #b8a896;
+  --theme-elevation-400: #A89068;
+  --theme-elevation-500: #2D2D2D;
+  --theme-elevation-600: #1a1a1a;
+  --theme-elevation-650: #111111;
+  --theme-elevation-700: #0a0a0a;
+  --theme-elevation-800: #050505;
+  --theme-elevation-900: #000000;
+  --theme-elevation-1000: #000000;
+  --theme-input-focus-border: #E8611A;
+  --color-base-500: #E8611A;
+}
+
+/* Dark mode overrides — keep it professional */
+[data-theme="dark"] {
+  --theme-input-focus-border: #E8611A;
+  --color-base-500: #E8611A;
+}
+
+/* Login page */
+.login {
+  .form-submit .btn {
+    background-color: #E8611A;
+    &:hover {
+      background-color: #d4560f;
+    }
+  }
+}
+
+/* Nav styling */
+.nav {
+  border-right-color: #E7E0D8;
+}
+
+/* Collection group headers */
+.nav-group__label {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: #A89068;
+}
+
+/* Save/publish buttons */
+.btn[type="submit"],
+.btn--style-primary {
+  background-color: #E8611A !important;
+  &:hover {
+    background-color: #d4560f !important;
+  }
+}
+
+/* Active nav item */
+.nav-group__content .nav__link--active {
+  background-color: rgba(232, 97, 26, 0.08);
+  color: #E8611A;
+}
+
+/* Dashboard header */
+.dashboard__header h1 {
+  font-weight: 700;
+}
+
+/* Improve table styling */
+.table .row-1:nth-child(even) {
+  background-color: rgba(245, 243, 240, 0.5);
+}
+
+/* Pill/tag styling */
+.pill {
+  border-radius: 4px;
+}
+
+/* Status indicator colors */
+.status-indicator--draft {
+  background-color: #A89068;
+}
+.status-indicator--active,
+.status-indicator--published {
+  background-color: #C8962E;
+}
+
+/* Breadcrumbs */
+.step-nav a {
+  color: #E8611A;
+  &:hover {
+    color: #d4560f;
+  }
+}
