@@ -24,9 +24,26 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: ' | KwikBuilt Homes',
+      icons: [
+        {
+          rel: 'icon',
+          type: 'image/svg+xml',
+          url: '/favicon.svg',
+        },
+      ],
+    },
+    components: {
+      graphics: {
+        Logo: '/src/components/admin/Logo',
+        Icon: '/src/components/admin/Icon',
+      },
+    },
   },
   collections: [Users, Products, Categories, Media, Documents, Quotes],
   db: postgresAdapter({
+    push: true,
     pool: {
       connectionString: process.env.DATABASE_URL || '',
       ssl: {
