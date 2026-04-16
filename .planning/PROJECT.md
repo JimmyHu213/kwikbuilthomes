@@ -49,13 +49,15 @@ Developers and sub-distributors can browse the full product catalog with rich de
 - Target market: Australian land developers and sub-distributors building modular housing estates or resort complexes
 - Buyers need to see compliance with Australian building standards (Corporations Act 2001)
 - The long-term vision includes a full 3D configurator where buyers can customize homes, place them on different terrains (flat, sloped, coastal, bush, resort settings), walk through them, save/share/compare configurations, download renders, and convert directly to quotes. 3D models will need to be created from scratch.
-- Existing codebase is a Next.js app configured for Cloudflare Workers deployment
+- Existing codebase is a Next.js app, migrating from Cloudflare Workers to Vercel
 - Reference: `./reference/KwikBuilt Pty Ltd — Corporate Structure.pdf`
 
 ## Constraints
 
-- **Tech stack**: Next.js on Cloudflare Workers (already scaffolded)
-- **CMS**: Needs a headless CMS for non-technical product/content management
+- **Tech stack**: Next.js on Vercel (migrating from Cloudflare Workers)
+- **CMS**: Payload CMS (open-source, embedded in Next.js app)
+- **Database**: PostgreSQL (Vercel Postgres or Neon)
+- **Open-source preference**: User strongly prefers open-source tools
 - **Audience**: B2B — design and UX should feel professional, not consumer-retail
 - **Products**: Starting with ~20 products, must scale to more
 - **Compliance**: Product pages must surface Australian building standards and certifications
@@ -67,7 +69,8 @@ Developers and sub-distributors can browse the full product catalog with rich de
 | V1 = catalog + quotes, V2 = 3D configurator | Launch core value first, add flagship feature after foundation is solid | — Pending |
 | B2B only, no consumer sales | Business model is distributor/developer focused | — Pending |
 | Price ranges shown, exact pricing via quote | Standard B2B practice, allows for volume/custom pricing | — Pending |
-| Next.js on Cloudflare Workers | Already scaffolded, edge performance for Australian market | — Pending |
+| Next.js on Vercel + Payload CMS | Open-source CMS preference, Payload runs in same Next.js app, Vercel is best Next.js host | — Decided 2026-03-20 |
+| Migrated from Cloudflare Workers | Payload requires Node.js runtime, CF Workers edge runtime too restrictive | — Decided 2026-03-20 |
 
 ---
 *Last updated: 2026-03-19 after initialization*

@@ -45,4 +45,15 @@ next-env.d.ts
 src/payload-types.ts
 src/app/(payload)/admin/importMap.js
 
+# Planning & docs (internal)
 .planning/
+docs/
+
+# OpenNext (Cloudflare build output — not needed for Vercel)
+.open-next/
+
+# Superpowers plugin (brainstorm sessions, mockups)
+.superpowers/
+
+# Cloudflare dev vars
+.dev.vars
