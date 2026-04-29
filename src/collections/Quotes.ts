@@ -34,6 +34,8 @@ export const Quotes: CollectionConfig = {
               options: [
                 { label: 'Product Page', value: 'product-page' },
                 { label: 'Site Planner', value: 'planner' },
+                { label: 'Contact Form', value: 'contact' },
+                { label: 'General Quote', value: 'general' },
               ],
               admin: { description: 'Where this quote originated' },
             },
@@ -99,6 +101,20 @@ export const Quotes: CollectionConfig = {
                 condition: (data) => data.source === 'planner',
               },
             },
+            {
+              name: 'interestCategory',
+              type: 'select',
+              label: 'Interest Category',
+              options: [
+                { label: 'Modular Homes', value: 'modular-homes' },
+                { label: 'Kit Homes', value: 'kit-homes' },
+                { label: 'Container Homes', value: 'container-homes' },
+                { label: 'Tiny Homes', value: 'tiny-homes' },
+                { label: 'Sheds', value: 'sheds' },
+                { label: 'Other', value: 'other' },
+              ],
+              admin: { condition: (data) => data.source === 'general' },
+            },
           ],
         },
         {
@@ -130,15 +146,16 @@ export const Quotes: CollectionConfig = {
             {
               name: 'quantity',
               type: 'number',
-              required: true,
               min: 1,
               defaultValue: 1,
             },
             {
               name: 'deliveryState',
               type: 'select',
-              required: true,
               options: ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT'],
+              admin: {
+                condition: (data) => data.source !== 'contact',
+              },
             },
             {
               name: 'deliveryLocation',
