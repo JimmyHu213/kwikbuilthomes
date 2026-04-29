@@ -14,6 +14,7 @@ import { Categories } from './src/collections/Categories'
 import { Media } from './src/collections/Media'
 import { Documents } from './src/collections/Documents'
 import { Quotes } from './src/collections/Quotes'
+import { SiteSettings } from './src/globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -42,6 +43,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Products, Categories, Media, Documents, Quotes],
+  globals: [SiteSettings],
   db: postgresAdapter({
     push: true,
     pool: {
