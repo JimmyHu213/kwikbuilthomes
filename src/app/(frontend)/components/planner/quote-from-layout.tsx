@@ -22,7 +22,7 @@ export function QuoteFromLayout() {
       sessionStorage.setItem('plannerScreenshot', screenshot)
     }
 
-    router.push('/planner/quote')
+    router.push('/designer')
   }
 
   return (

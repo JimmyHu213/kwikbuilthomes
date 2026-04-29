@@ -28,7 +28,7 @@ export function ProductPreviewModal({ slug, title }: ProductPreviewModalProps) {
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <h3 className="text-sm font-semibold text-foreground">{title} — 3D Preview</h3>
               <div className="flex items-center gap-2">
-                <a href={`/planner?product=${slug}`} className="text-xs text-primary hover:underline">Open in Site Planner</a>
+                <a href={`/designer?product=${slug}`} className="text-xs text-primary hover:underline">Open in Site Planner</a>
                 <button type="button" onClick={() => setOpen(false)} className="rounded-md p-1 text-muted-foreground hover:text-foreground">
                   <X className="h-4 w-4" />
                 </button>

@@ -6,15 +6,15 @@ import type { ProductForPlanner } from '@/lib/planner/types'
 import type { Media } from '@/payload-types'
 
 export const metadata: Metadata = {
-  title: 'Site Planner | Kwik Built Homes',
-  description: 'Design your modular housing layout with our interactive 3D site planner.',
+  title: 'Designer | KwikBuilt Homes',
+  description: 'Design your modular housing layout with our interactive 3D designer.',
 }
 
 type Props = {
   searchParams: Promise<{ product?: string }>
 }
 
-export default async function PlannerPage({ searchParams }: Props) {
+export default async function DesignerPage({ searchParams }: Props) {
   const { product: preselectedSlug } = await searchParams
   let products: ProductForPlanner[] = []
 
