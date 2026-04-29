@@ -12,7 +12,10 @@ import { ProductConfigurator } from '../../components/product-configurator'
 import { extractGallerySlides } from '@/lib/gallery'
 import { extractOptionData } from '@/lib/configuration'
 import type { GallerySlide } from '@/lib/gallery'
-import type { Category, Media, Document as PayloadDocument } from '@/payload-types'
+import type { Category, Media, Product, Document as PayloadDocument } from '@/payload-types'
+
+type FloorPlanItem = NonNullable<Product['floorPlans']>[number]
+type CertificationItem = NonNullable<Product['certifications']>[number]
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -79,8 +82,8 @@ export default async function ProductPage({ params }: Props) {
   const gallerySlides: GallerySlide[] = extractGallerySlides(product.gallery)
 
   const floorPlans = (product.floorPlans ?? [])
-    .filter((fp) => fp.image && typeof fp.image === 'object' && (fp.image as Media).url)
-    .map((fp) => {
+    .filter((fp: FloorPlanItem) => fp.image && typeof fp.image === 'object' && (fp.image as Media).url)
+    .map((fp: FloorPlanItem) => {
       const img = fp.image as Media
       return {
         url: img.url!,
@@ -122,13 +125,13 @@ export default async function ProductPage({ params }: Props) {
     (compliance.applicableStates && compliance.applicableStates.length > 0)
 
   const downloadableCerts = (product.certifications ?? []).filter(
-    (cert) => cert.document && typeof cert.document === 'object' && (cert.document as PayloadDocument).url,
+    (cert: CertificationItem) => cert.document && typeof cert.document === 'object' && (cert.document as PayloadDocument).url,
   )
 
   const configData = extractOptionData(product.optionCategories)
 
   const descriptionParagraphs = product.description
-    ? product.description.split('\n\n').filter((p) => p.trim().length > 0)
+    ? product.description.split('\n\n').filter((p: string) => p.trim().length > 0)
     : []
 
   return (
@@ -188,7 +191,7 @@ export default async function ProductPage({ params }: Props) {
           <div className="w-8 h-0.5 bg-primary mb-3" />
           <h2 className="text-xl font-semibold text-foreground mb-4">Description</h2>
           <div className="space-y-4">
-            {descriptionParagraphs.map((paragraph, i) => (
+            {descriptionParagraphs.map((paragraph: string, i: number) => (
               <p key={i} className="text-muted-foreground leading-relaxed">
                 {paragraph}
               </p>
@@ -212,7 +215,7 @@ export default async function ProductPage({ params }: Props) {
           <div className="w-8 h-0.5 bg-primary mb-3" />
           <h2 className="text-xl font-semibold text-foreground mb-4">Floor Plans</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {floorPlans.map((plan, i) => (
+            {floorPlans.map((plan: { url: string; alt: string; label?: string }, i: number) => (
               <div key={i} className="rounded-xl border border-border overflow-hidden">
                 <div className="relative aspect-[4/3]">
                   <Image
@@ -362,7 +365,7 @@ export default async function ProductPage({ params }: Props) {
                   Certification Documents
                 </h3>
                 <div className="space-y-2">
-                  {downloadableCerts.map((cert) => {
+                  {downloadableCerts.map((cert: CertificationItem) => {
                     const doc = cert.document as PayloadDocument
                     return (
                       <a

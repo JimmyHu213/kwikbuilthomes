@@ -5,7 +5,7 @@ export function buildBom(modules: PlannedModule[]): LayoutBom {
     return { lineItems: [], totalModules: 0, totalFloorArea: 0, estimatedPriceFrom: null }
   }
 
-  const grouped = new Map<number, PlannedModule[]>()
+  const grouped = new Map<number | string, PlannedModule[]>()
   for (const mod of modules) {
     const existing = grouped.get(mod.productId) ?? []
     existing.push(mod)

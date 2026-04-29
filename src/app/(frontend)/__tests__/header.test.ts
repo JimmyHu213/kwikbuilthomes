@@ -1,9 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import type { getPayloadClient as GetPayloadClientFn } from '@/lib/payload'
 
 // Mock getPayloadClient before importing the component
 vi.mock('@/lib/payload', () => ({
   getPayloadClient: vi.fn(),
 }))
+
+type PayloadClient = Awaited<ReturnType<typeof GetPayloadClientFn>>
 
 // These tests verify header rendering logic.
 // Since Header is an async server component, we test the exported function directly.
@@ -24,7 +27,7 @@ describe('Header component', () => {
         totalDocs: 2,
       }),
     }
-    vi.mocked(getPayloadClient).mockResolvedValue(mockPayload as any)
+    vi.mocked(getPayloadClient).mockResolvedValue(mockPayload as unknown as PayloadClient)
 
     // Import the component module -- actual assertions will work once component exists
     // For now, verify the mock setup works
