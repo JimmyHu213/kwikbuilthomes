@@ -57,3 +57,4 @@ docs/
 
 # Cloudflare dev vars
 .dev.vars
+.env*.local

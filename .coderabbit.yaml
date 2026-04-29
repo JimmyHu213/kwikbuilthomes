@@ -1,0 +1,21 @@
+language: en-AU
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: "src/collections/**"
+      instructions: "These are Payload CMS collection configs. Check field types, access control, and admin conditions."
+    - path: "src/globals/**"
+      instructions: "These are Payload CMS Global configs. Verify default values and field structure."
+    - path: "src/lib/email/**"
+      instructions: "Email template builders. Ensure all user input is escaped with escapeHtml(). No raw interpolation."
+    - path: "src/lib/actions/**"
+      instructions: "Server actions. Verify Zod validation, error handling, and that emails don't block submission on failure."
+    - path: "src/app/(frontend)/**"
+      instructions: "Frontend pages. Use semantic Tailwind tokens (bg-primary, text-foreground) — no hardcoded hex colors except established footer patterns."
+chat:
+  auto_reply: true
