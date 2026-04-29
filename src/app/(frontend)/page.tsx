@@ -189,13 +189,15 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           {hasError && (
             <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-800">
-              <h2 className="font-semibold">Database not connected</h2>
-              <p className="mt-1 text-sm">
-                Add <code className="font-mono bg-amber-100 px-1 rounded">DATABASE_URL</code> and{' '}
-                <code className="font-mono bg-amber-100 px-1 rounded">PAYLOAD_SECRET</code> to your{' '}
-                <code className="font-mono bg-amber-100 px-1 rounded">.env.local</code> file, then
-                restart the dev server.
-              </p>
+              <h2 className="font-semibold">Content temporarily unavailable</h2>
+              {process.env.NODE_ENV === 'development' && (
+                <p className="mt-1 text-sm">
+                  Add <code className="font-mono bg-amber-100 px-1 rounded">DATABASE_URL</code> and{' '}
+                  <code className="font-mono bg-amber-100 px-1 rounded">PAYLOAD_SECRET</code> to your{' '}
+                  <code className="font-mono bg-amber-100 px-1 rounded">.env.local</code> file, then
+                  restart the dev server.
+                </p>
+              )}
             </div>
           )}
 

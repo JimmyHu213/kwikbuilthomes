@@ -6,8 +6,9 @@ export function buildPlannerBuyerConfirmationEmail(data: {
   totalModules: number
   totalFloorArea: number
 }): { subject: string; html: string } {
+  const safeRef = data.referenceNumber.replace(/[\r\n]+/g, ' ').trim()
   return {
-    subject: `Quote Request Received: ${data.referenceNumber} - Kwik Built Homes`,
+    subject: `Quote Request Received: ${safeRef} - Kwik Built Homes`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 16px;">Thank You, ${escapeHtml(data.contactName)}!</h1>

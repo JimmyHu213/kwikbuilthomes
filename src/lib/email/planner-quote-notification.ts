@@ -35,8 +35,10 @@ export function buildPlannerAdminNotificationEmail(data: PlannerNotificationData
     )
     .join('')
 
+  const safeRef = data.referenceNumber.replace(/[\r\n]+/g, ' ').trim()
+
   return {
-    subject: `Site Planner Quote: ${data.referenceNumber} (${data.layoutData.length} product types)`,
+    subject: `Site Planner Quote: ${safeRef} (${data.layoutData.length} product types)`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 16px;">Site Planner Quote Request</h1>

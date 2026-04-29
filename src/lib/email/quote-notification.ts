@@ -35,8 +35,11 @@ export function buildAdminNotificationEmail(data: {
       `
     : ''
 
+  const safeRef = data.referenceNumber.replace(/[\r\n]+/g, ' ').trim()
+  const safeTitle = (data.productTitle || '').replace(/[\r\n]+/g, ' ').trim()
+
   return {
-    subject: `New Quote Request: ${data.referenceNumber} - ${data.productTitle}`,
+    subject: `New Quote Request: ${safeRef} - ${safeTitle}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 16px;">New Quote Request</h1>
