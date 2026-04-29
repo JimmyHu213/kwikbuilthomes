@@ -32,6 +32,7 @@ npm run generate:types  # Regenerate Payload TypeScript types
 - **NEVER** merge PRs with admin privilege bypass. CI must pass and CodeRabbit must review.
 - Always create a feature branch from `dev` or `main` for new work.
 - Write clear commit messages: `feat:`, `fix:`, `chore:`, `style:`, `docs:`, `test:`, `refactor:`.
+- Commit each major feature, fix, or update separately. Do not batch unrelated changes into a single commit.
 - Do not commit `.planning/` docs to git.
 
 ## Coding Conventions
