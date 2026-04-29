@@ -52,7 +52,7 @@ export function PlannerQuoteForm() {
           <p className="mt-2 text-sm text-muted-foreground">Reference: <strong className="text-foreground">{state.referenceNumber}</strong></p>
         )}
         <p className="mt-3 text-muted-foreground">Our team will review your layout and respond within 2 business days.</p>
-        <Link href="/planner" className={cn(buttonVariants({ variant: 'outline' }), 'mt-6')}>Back to Site Planner</Link>
+        <Link href="/designer" className={cn(buttonVariants({ variant: 'outline' }), 'mt-6')}>Back to Site Planner</Link>
       </div>
     )
   }
@@ -61,7 +61,7 @@ export function PlannerQuoteForm() {
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">No layout data found. Please design a layout first.</p>
-        <Link href="/planner" className={cn(buttonVariants(), 'mt-4')}>Open Site Planner</Link>
+        <Link href="/designer" className={cn(buttonVariants(), 'mt-4')}>Open Site Planner</Link>
       </div>
     )
   }
