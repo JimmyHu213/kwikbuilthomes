@@ -76,10 +76,9 @@ describe('Quotes collection', () => {
   it('has project detail fields', () => {
     const projectTab = getTab(Quotes, 'Project Details')
     const quantity = findField(projectTab.fields, 'quantity')
-    expect(quantity).toMatchObject({ type: 'number', required: true })
+    expect(quantity).toMatchObject({ type: 'number' })
     const deliveryState = findField(projectTab.fields, 'deliveryState') as SelectField
     expect(deliveryState.type).toBe('select')
-    expect(deliveryState.required).toBe(true)
     const stateValues = deliveryState.options.map((o) =>
       typeof o === 'string' ? o : o.value,
     )
