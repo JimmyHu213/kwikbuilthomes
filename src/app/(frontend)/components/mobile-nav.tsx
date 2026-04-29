@@ -11,11 +11,16 @@ import {
 import { Button } from '@/components/ui/button'
 import { Menu } from 'lucide-react'
 
-interface MobileNavProps {
-  categories: { id: number; title: string; slug: string }[]
-}
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/products', label: 'Products' },
+  { href: '/how-it-works', label: 'How It Works' },
+  { href: '/designer', label: 'Designer' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+]
 
-export function MobileNav({ categories }: MobileNavProps) {
+export function MobileNav() {
   const [open, setOpen] = useState(false)
 
   return (
@@ -33,34 +38,19 @@ export function MobileNav({ categories }: MobileNavProps) {
           <span className="ml-1 text-xs font-medium text-muted-foreground">HOMES</span>
         </SheetTitle>
         <nav className="flex flex-col gap-1 mt-4">
-          <Link
-            href="/"
-            onClick={() => setOpen(false)}
-            className="text-base py-3 text-foreground/70 hover:text-primary transition-colors"
-          >
-            Home
-          </Link>
-          <Link
-            href="/products"
-            onClick={() => setOpen(false)}
-            className="text-base py-3 text-foreground/70 hover:text-primary transition-colors"
-          >
-            All Products
-          </Link>
-          <div className="h-px bg-border my-2" />
-          {categories.map((cat) => (
+          {navLinks.map((link) => (
             <Link
-              key={cat.id}
-              href={`/categories/${cat.slug}`}
+              key={link.href}
+              href={link.href}
               onClick={() => setOpen(false)}
               className="text-base py-3 text-foreground/70 hover:text-primary transition-colors"
             >
-              {cat.title}
+              {link.label}
             </Link>
           ))}
           <div className="h-px bg-border my-2" />
           <Link
-            href="/products"
+            href="/quote"
             onClick={() => setOpen(false)}
             className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors w-full mt-2"
           >

@@ -1,27 +1,15 @@
 import Link from 'next/link'
-import { getPayloadClient } from '@/lib/payload'
 import { MobileNav } from './mobile-nav'
 
-export async function Header() {
-  let categories: { id: number; title: string; slug: string }[] = []
+const navLinks = [
+  { href: '/products', label: 'Products' },
+  { href: '/how-it-works', label: 'How It Works' },
+  { href: '/designer', label: 'Designer' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+]
 
-  try {
-    const payload = await getPayloadClient()
-    const result = await payload.find({
-      collection: 'categories',
-      sort: 'displayOrder',
-      limit: 20,
-      depth: 0,
-    })
-    categories = result.docs.map((doc) => ({
-      id: doc.id as number,
-      title: doc.title as string,
-      slug: doc.slug as string,
-    }))
-  } catch {
-    // Graceful degradation: render header without category links if DB unavailable
-  }
-
+export function Header() {
   return (
     <header className="border-b border-border bg-white">
       <nav className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -32,23 +20,17 @@ export async function Header() {
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
-          <Link
-            href="/products"
-            className="text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
-          >
-            All Products
-          </Link>
-          {categories.map((cat) => (
+          {navLinks.map((link) => (
             <Link
-              key={cat.id}
-              href={`/categories/${cat.slug}`}
+              key={link.href}
+              href={link.href}
               className="text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
             >
-              {cat.title}
+              {link.label}
             </Link>
           ))}
           <Link
-            href="/products"
+            href="/quote"
             className="inline-flex items-center rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             Request a Quote
@@ -56,7 +38,7 @@ export async function Header() {
         </div>
 
         <div className="md:hidden">
-          <MobileNav categories={categories} />
+          <MobileNav />
         </div>
       </nav>
     </header>
