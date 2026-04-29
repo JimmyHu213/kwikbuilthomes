@@ -12,7 +12,7 @@ export default function QuotePage() {
       <section className="bg-[#2D2D2D] py-16 md:py-20">
         <div className="max-w-4xl mx-auto px-6">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">Request a Quote</h1>
-          <p className="mt-4 text-lg text-accent font-medium">Tell us about your project and we'll get back to you within 2 business days</p>
+          <p className="mt-4 text-lg text-accent font-medium">Tell us about your project and we&apos;ll get back to you within 2 business days</p>
         </div>
       </section>
       <div className="max-w-4xl mx-auto px-6 py-12">

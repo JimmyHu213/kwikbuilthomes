@@ -39,7 +39,7 @@ export default async function ContactPage() {
           <div>
             <div className="w-12 h-1 bg-primary mb-4" />
             <h2 className="text-2xl font-semibold text-foreground mb-6">Get In Touch</h2>
-            <p className="text-muted-foreground leading-relaxed mb-8">Whether you have a question about our products, need a quote, or want to discuss a project, we're here to help.</p>
+            <p className="text-muted-foreground leading-relaxed mb-8">Whether you have a question about our products, need a quote, or want to discuss a project, we&apos;re here to help.</p>
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <Phone className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />

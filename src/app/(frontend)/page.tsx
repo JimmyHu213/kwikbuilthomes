@@ -9,7 +9,6 @@ import {
   Clock,
   Truck,
 } from 'lucide-react'
-import type { Product } from '@/payload-types'
 import type { ComponentType } from 'react'
 
 const iconMap: Record<string, ComponentType<{ className?: string }>> = {

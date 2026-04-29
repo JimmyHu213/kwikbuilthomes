@@ -64,7 +64,7 @@ export function GeneralQuoteForm() {
         <legend className="text-lg font-semibold text-foreground mb-4">Project Details</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="interestCategory" className={labelClassName}>I'm interested in <span className="text-red-500">*</span></label>
+            <label htmlFor="interestCategory" className={labelClassName}>I&apos;m interested in <span className="text-red-500">*</span></label>
             <select id="interestCategory" name="interestCategory" required className={inputClassName} defaultValue="">
               <option value="" disabled>Select a category</option>
               {interestCategories.map((cat) => (<option key={cat} value={cat}>{interestCategoryLabels[cat]}</option>))}
