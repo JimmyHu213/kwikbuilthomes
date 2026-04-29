@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import type { getPayloadClient as GetPayloadClientFn } from '@/lib/payload'
 
 vi.mock('@/lib/payload', () => ({
   getPayloadClient: vi.fn(),
 }))
+
+type PayloadClient = Awaited<ReturnType<typeof GetPayloadClientFn>>
 
 describe('Category page', () => {
   beforeEach(() => {
@@ -27,7 +30,7 @@ describe('Category page', () => {
           totalDocs: 2,
         }),
     }
-    vi.mocked(getPayloadClient).mockResolvedValue(mockPayload as any)
+    vi.mocked(getPayloadClient).mockResolvedValue(mockPayload as unknown as PayloadClient)
 
     const payload = await getPayloadClient()
 
@@ -75,7 +78,7 @@ describe('Category page', () => {
           totalDocs: 0,
         }),
     }
-    vi.mocked(getPayloadClient).mockResolvedValue(mockPayload as any)
+    vi.mocked(getPayloadClient).mockResolvedValue(mockPayload as unknown as PayloadClient)
 
     const payload = await getPayloadClient()
     const catResult = await payload.find({ collection: 'categories', where: { slug: { equals: 'accessories' } }, limit: 1, depth: 0 })

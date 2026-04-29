@@ -107,15 +107,16 @@ describe('Quotes collection', () => {
 
   it('has correct access control: create is public, read/update/delete require user', () => {
     const access = Quotes.access!
+    type AccessFn = (...args: unknown[]) => unknown
     // create returns true (public)
-    expect((access.create as Function)({ req: {} })).toBe(true)
+    expect((access.create as unknown as AccessFn)({ req: {} })).toBe(true)
     // read/update/delete require user
-    expect((access.read as Function)({ req: { user: null } })).toBeFalsy()
-    expect((access.read as Function)({ req: { user: { id: 1 } } })).toBeTruthy()
-    expect((access.update as Function)({ req: { user: null } })).toBeFalsy()
-    expect((access.update as Function)({ req: { user: { id: 1 } } })).toBeTruthy()
-    expect((access.delete as Function)({ req: { user: null } })).toBeFalsy()
-    expect((access.delete as Function)({ req: { user: { id: 1 } } })).toBeTruthy()
+    expect((access.read as unknown as AccessFn)({ req: { user: null } })).toBeFalsy()
+    expect((access.read as unknown as AccessFn)({ req: { user: { id: 1 } } })).toBeTruthy()
+    expect((access.update as unknown as AccessFn)({ req: { user: null } })).toBeFalsy()
+    expect((access.update as unknown as AccessFn)({ req: { user: { id: 1 } } })).toBeTruthy()
+    expect((access.delete as unknown as AccessFn)({ req: { user: null } })).toBeFalsy()
+    expect((access.delete as unknown as AccessFn)({ req: { user: { id: 1 } } })).toBeTruthy()
   })
 
   it('has correct admin config', () => {

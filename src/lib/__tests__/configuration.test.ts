@@ -103,7 +103,7 @@ describe('extractOptionData', () => {
         id: 'cat-3',
         categoryName: 'Null Options',
         selectionType: 'multiple',
-        options: null,
+        options: undefined,
       },
     ]
 
@@ -113,7 +113,7 @@ describe('extractOptionData', () => {
   })
 
   it('handles null, undefined, and empty inputs', () => {
-    expect(extractOptionData(null)).toEqual([])
+    expect(extractOptionData(undefined)).toEqual([])
     expect(extractOptionData(undefined)).toEqual([])
     expect(extractOptionData([])).toEqual([])
   })

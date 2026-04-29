@@ -36,7 +36,7 @@ export function ModuleInteractions({ onPlaceModule, onDeleteModule, onRotateModu
       const z = snapToGrid(origin.z + direction.z * t)
 
       const cloned = cloneTemplate(placingProduct.sceneTemplate, [x, 0, z])
-      const module: PlannedModule = {
+      const mod: PlannedModule = {
         rootNodeId: cloned.rootNodeIds[0],
         productId: placingProduct.productId,
         productTitle: placingProduct.title,
@@ -45,7 +45,7 @@ export function ModuleInteractions({ onPlaceModule, onDeleteModule, onRotateModu
         dimensions: null,
         priceFrom: null,
       }
-      onPlaceModule(module, cloned.nodes, cloned.rootNodeIds)
+      onPlaceModule(mod, cloned.nodes, cloned.rootNodeIds)
       return
     }
 
