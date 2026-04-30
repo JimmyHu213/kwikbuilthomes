@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getPayloadClient } from '@/lib/payload'
 import { ProductCard } from '../../components/product-card'
+import { AnimateOnScroll } from '../../components/animate-on-scroll'
 import type { Product } from '@/payload-types'
 
 type Props = {
@@ -44,7 +45,6 @@ export default async function CategoryPage({ params }: Props) {
   try {
     const payload = await getPayloadClient()
 
-    // Find category by slug
     const categoryResult = await payload.find({
       collection: 'categories',
       where: { slug: { equals: slug } },
@@ -64,7 +64,6 @@ export default async function CategoryPage({ params }: Props) {
       description: cat.description as string | null | undefined,
     }
 
-    // Find products in this category (depth: 1 to populate heroImage)
     const productResult = await payload.find({
       collection: 'products',
       where: {
@@ -77,19 +76,18 @@ export default async function CategoryPage({ params }: Props) {
 
     products = productResult.docs as Product[]
   } catch (err) {
-    // If notFound() was called, re-throw it (Next.js uses a special error for this)
     if (err && typeof err === 'object' && 'digest' in err) {
       throw err
     }
 
     return (
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-800">
+        <div className="border border-amber-200 bg-amber-50 p-6 text-amber-800">
           <h2 className="font-semibold">Database not connected</h2>
           <p className="mt-1 text-sm">
-            Add <code className="font-mono bg-amber-100 px-1 rounded">DATABASE_URL</code> and{' '}
-            <code className="font-mono bg-amber-100 px-1 rounded">PAYLOAD_SECRET</code> to your{' '}
-            <code className="font-mono bg-amber-100 px-1 rounded">.env.local</code> file, then
+            Add <code className="font-mono bg-amber-100 px-1">DATABASE_URL</code> and{' '}
+            <code className="font-mono bg-amber-100 px-1">PAYLOAD_SECRET</code> to your{' '}
+            <code className="font-mono bg-amber-100 px-1">.env.local</code> file, then
             restart the dev server.
           </p>
         </div>
@@ -98,42 +96,47 @@ export default async function CategoryPage({ params }: Props) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-16">
-      <nav className="text-sm text-muted-foreground mb-6">
-        <Link href="/products" className="hover:text-primary transition-colors">
-          Products
-        </Link>
-        <span className="mx-2">/</span>
-        <span className="text-foreground">{categoryDoc!.title}</span>
-      </nav>
+    <div>
+      {/* Page Banner */}
+      <section className="bg-gradient-to-br from-[#2D2D2D] to-[#3d3d3d] py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <nav className="text-sm text-white/50 mb-4">
+            <Link href="/products" className="hover:text-white transition-colors">
+              Products
+            </Link>
+            <span className="mx-2">/</span>
+            <span className="text-white/80">{categoryDoc!.title}</span>
+          </nav>
+          <div className="w-12 h-0.5 bg-primary mb-4" />
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
+            {categoryDoc!.title}
+          </h1>
+          {categoryDoc!.description && (
+            <p className="mt-3 text-lg text-white/70">{categoryDoc!.description}</p>
+          )}
+        </div>
+      </section>
 
-      <header className="mb-12">
-        <div className="w-12 h-1 bg-primary mb-4" />
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          {categoryDoc!.title}
-        </h1>
-        {categoryDoc!.description && (
-          <p className="mt-3 text-lg text-muted-foreground">{categoryDoc!.description}</p>
+      <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
+        {products.length === 0 && (
+          <div className="border border-border bg-muted/50 p-6 text-muted-foreground">
+            <p>No products available in this category yet.</p>
+          </div>
         )}
-      </header>
 
-      {products.length === 0 && (
-        <div className="rounded-lg border border-border bg-muted/50 p-6 text-muted-foreground">
-          <p>No products available in this category yet.</p>
-        </div>
-      )}
-
-      {products.length > 0 && (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              categorySlug={slug}
-            />
-          ))}
-        </div>
-      )}
+        {products.length > 0 && (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product, i) => (
+              <AnimateOnScroll key={product.id} delay={i * 100}>
+                <ProductCard
+                  product={product}
+                  categorySlug={slug}
+                />
+              </AnimateOnScroll>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
