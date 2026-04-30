@@ -30,8 +30,12 @@ export interface Config {
   db: {
     defaultIDType: number
   }
-  globals: {}
-  globalsSelect: {}
+  globals: {
+    'site-content': SiteContent
+  }
+  globalsSelect: {
+    'site-content': SiteContentSelect<false> | SiteContentSelect<true>
+  }
   locale: null
   user: User & {
     collection: 'users'
@@ -247,6 +251,55 @@ export interface Quote {
 }
 
 /**
+ * SiteContent global
+ */
+export interface SiteContent {
+  id: number
+  hero?: {
+    headline?: string | null
+    tagline?: string | null
+    primaryCta?: string | null
+    secondaryCta?: string | null
+  }
+  heroVideo?: (number | null) | Media
+  heroPoster?: (number | null) | Media
+  stats?: {
+    label: string
+    value: number
+    suffix?: string | null
+    id?: string | null
+  }[]
+  valueProps?: {
+    title: string
+    description: string
+    icon?: ('factory' | 'shield-check' | 'piggy-bank' | 'building-2' | 'clock' | 'truck') | null
+    id?: string | null
+  }[]
+  aboutSummary?: string | null
+  ctaBanner?: {
+    heading?: string | null
+    buttonText?: string | null
+  }
+  companyStory?: string | null
+  dealershipModel?: string | null
+  leadership?: {
+    name: string
+    role: string
+    description?: string | null
+    id?: string | null
+  }[]
+  whyModular?: string | null
+  steps?: {
+    title: string
+    description: string
+    icon?: ('message-square' | 'pencil-ruler' | 'factory' | 'truck') | null
+    id?: string | null
+  }[]
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+
+/**
  * Select types for type-safe field selection
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -343,6 +396,23 @@ export interface QuotesSelect<T extends boolean = true> {
   siteAddress?: T
   modelMix?: T
   additionalNotes?: T
+  updatedAt?: T
+  createdAt?: T
+}
+
+export interface SiteContentSelect<T extends boolean = true> {
+  hero?: T
+  heroVideo?: T
+  heroPoster?: T
+  stats?: T
+  valueProps?: T
+  aboutSummary?: T
+  ctaBanner?: T
+  companyStory?: T
+  dealershipModel?: T
+  leadership?: T
+  whyModular?: T
+  steps?: T
   updatedAt?: T
   createdAt?: T
 }
