@@ -8,7 +8,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Button } from '@/components/ui/button'
 import { Menu } from 'lucide-react'
 
 const navLinks = [
@@ -25,11 +24,9 @@ export function MobileNav() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger>
-        <Button variant="ghost" size="icon">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle menu</span>
-        </Button>
+      <SheetTrigger className="inline-flex items-center justify-center rounded-none size-8 hover:bg-muted transition-colors">
+        <Menu className="h-5 w-5" />
+        <span className="sr-only">Toggle menu</span>
       </SheetTrigger>
       <SheetContent side="left">
         <SheetTitle>
@@ -52,7 +49,7 @@ export function MobileNav() {
           <Link
             href="/quote"
             onClick={() => setOpen(false)}
-            className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors w-full mt-2"
+            className="inline-flex items-center justify-center bg-primary px-5 py-3 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 transition-colors w-full mt-2"
           >
             Request a Quote
           </Link>
