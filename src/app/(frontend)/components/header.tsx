@@ -31,7 +31,7 @@ export function Header() {
           ))}
           <Link
             href="/quote"
-            className="inline-flex items-center rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center bg-primary px-5 py-2 text-sm font-semibold uppercase tracking-wide text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             Request a Quote
           </Link>
