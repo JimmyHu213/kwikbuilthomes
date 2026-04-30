@@ -34,6 +34,7 @@ npm run generate:types  # Regenerate Payload TypeScript types
 - Write clear commit messages: `feat:`, `fix:`, `chore:`, `style:`, `docs:`, `test:`, `refactor:`.
 - Commit each major feature, fix, or update separately. Do not batch unrelated changes into a single commit.
 - Always use **rebase merge** when merging PRs to keep git history linear and clean. No merge commits.
+- **Always resolve merge conflicts before creating or pushing a PR.** Run `git fetch origin main && git merge origin/main` on the feature branch, resolve conflicts locally, then push. Never create PRs that have conflicts. Prefer creating branches from `origin/main` with cherry-picked commits for clean PRs.
 - Do not commit `.planning/` docs to git.
 
 ## Coding Conventions
