@@ -26,7 +26,7 @@ export function PhotoGallery({ slides }: PhotoGalleryProps) {
           <button
             key={slide.src}
             type="button"
-            className="overflow-hidden rounded-xl focus:outline-none focus:ring-2 focus:ring-ring"
+            className="overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary"
             onClick={() => {
               setIndex(i)
               setOpen(true)
