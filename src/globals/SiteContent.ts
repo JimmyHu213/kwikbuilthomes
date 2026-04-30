@@ -43,6 +43,51 @@ export const SiteContent: GlobalConfig = {
               ],
             },
             {
+              name: 'heroVideo',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Hero Video (MP4)',
+              admin: {
+                description: 'Optional background video for the homepage hero. MP4 format recommended. Falls back to poster image or gradient.',
+              },
+            },
+            {
+              name: 'heroPoster',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Hero Poster Image',
+              admin: {
+                description: 'Poster image shown while video loads, on mobile, or when no video is set.',
+              },
+            },
+            {
+              name: 'stats',
+              type: 'array',
+              label: 'Stats Counter',
+              admin: {
+                description: 'Animated statistics displayed on the homepage (e.g. "50+ Designs")',
+              },
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  required: true,
+                  admin: { description: 'Label shown below the number (e.g. "Designs")' },
+                },
+                {
+                  name: 'value',
+                  type: 'number',
+                  required: true,
+                  admin: { description: 'The number to count up to (e.g. 50)' },
+                },
+                {
+                  name: 'suffix',
+                  type: 'text',
+                  admin: { description: 'Optional suffix like "+" or "%" or "m²"' },
+                },
+              ],
+            },
+            {
               name: 'valueProps',
               type: 'array',
               label: 'Value Propositions',
