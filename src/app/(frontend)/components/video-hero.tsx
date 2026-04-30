@@ -49,7 +49,7 @@ export function VideoHero({ videoUrl, posterUrl, children, className = '' }: Vid
       <div className="absolute inset-0 bg-black/50" />
 
       {/* Content */}
-      <div className="relative z-10">
+      <div className="relative z-10 flex items-center justify-center w-full min-h-[inherit]">
         {children}
       </div>
     </section>
