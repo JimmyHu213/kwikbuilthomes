@@ -48,7 +48,6 @@ export async function Footer() {
               {[
                 { href: '/products', label: 'Products' },
                 { href: '/how-it-works', label: 'How It Works' },
-                { href: '/designer', label: 'Designer' },
                 { href: '/about', label: 'About' },
                 { href: '/contact', label: 'Contact' },
                 { href: '/quote', label: 'Request a Quote' },
