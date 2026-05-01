@@ -1,39 +1,23 @@
 import Link from 'next/link'
-import { cache } from 'react'
-import { getPayloadClient } from '@/lib/payload'
+import { getCachedSiteSettings } from '@/lib/cached-data'
 
-type SiteSettingsData = {
-  phone?: string
-  email?: string
-  location?: string
-  companyName?: string
-  tagline?: string
+const defaults = {
+  phone: '1300 KWIKBUILT',
+  email: 'info@kwikbuilthomes.com.au',
+  location: 'Port Macquarie, NSW, Australia',
+  companyName: 'KwikBuilt Pty Ltd',
+  tagline: 'Australian-engineered modular homes',
 }
 
-const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
-  try {
-    const payload = await getPayloadClient()
-    const settings = await payload.findGlobal({ slug: 'site-settings' })
-    return {
-      phone: settings.phone ?? '1300 KWIKBUILT',
-      email: settings.email ?? 'info@kwikbuilthomes.com.au',
-      location: settings.location ?? 'Port Macquarie, NSW, Australia',
-      companyName: settings.companyName ?? 'KwikBuilt Pty Ltd',
-      tagline: settings.tagline ?? 'Australian-engineered modular homes',
-    }
-  } catch {
-    return {
-      phone: '1300 KWIKBUILT',
-      email: 'info@kwikbuilthomes.com.au',
-      location: 'Port Macquarie, NSW, Australia',
-      companyName: 'KwikBuilt Pty Ltd',
-      tagline: 'Australian-engineered modular homes',
-    }
-  }
-})
-
 export async function Footer() {
-  const settings = await getSiteSettings()
+  const raw = await getCachedSiteSettings()
+  const settings = {
+    phone: raw?.phone ?? defaults.phone,
+    email: raw?.email ?? defaults.email,
+    location: raw?.location ?? defaults.location,
+    companyName: raw?.companyName ?? defaults.companyName,
+    tagline: raw?.tagline ?? defaults.tagline,
+  }
 
   return (
     <footer className="bg-[#2D2D2D] text-[#F5F3F0]">

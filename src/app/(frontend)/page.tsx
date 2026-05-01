@@ -1,10 +1,12 @@
 import Link from 'next/link'
-import { getPayloadClient } from '@/lib/payload'
+import { Suspense } from 'react'
+import { Loader2 } from 'lucide-react'
+import { getCachedSiteContent } from '@/lib/cached-data'
 import { getMediaUrl } from '@/lib/media'
-import { CategoryCard } from './components/category-card'
 import { VideoHero } from './components/video-hero'
 import { AnimateOnScroll } from './components/animate-on-scroll'
 import { StatCounter } from './components/stat-counter'
+import { CategoryGrid } from './components/category-grid'
 import {
   Factory,
   ShieldCheck,
@@ -71,104 +73,34 @@ type SiteContentHomepage = {
   ctaBanner?: { heading?: string; buttonText?: string }
 }
 
-type SiteContentHowItWorks = {
-  steps?: { title: string; description: string }[]
+function CategoryGridFallback() {
+  return (
+    <div className="flex items-center justify-center py-16">
+      <Loader2 className="w-6 h-6 text-primary animate-spin" />
+    </div>
+  )
 }
 
 export default async function HomePage() {
-  let categories: {
-    id: number
-    title: string
-    slug: string
-    description?: string | null
-    productCount: number
-    heroImage?: Media | null
-  }[] = []
-  let content: SiteContentHomepage = {}
-  let howItWorksContent: SiteContentHowItWorks = {}
-  let hasError = false
+  const siteContent = await getCachedSiteContent()
 
-  try {
-    const payload = await getPayloadClient()
-
-    // Fetch site content
-    try {
-      const siteContent = await payload.findGlobal({ slug: 'site-content' })
-      content = {
-        hero: siteContent.hero as SiteContentHomepage['hero'],
-        heroVideo: siteContent.heroVideo as SiteContentHomepage['heroVideo'],
-        heroPoster: siteContent.heroPoster as SiteContentHomepage['heroPoster'],
-        stats: siteContent.stats as SiteContentHomepage['stats'],
-        valueProps: siteContent.valueProps as SiteContentHomepage['valueProps'],
-        aboutSummary: siteContent.aboutSummary as string | undefined,
-        ctaBanner: siteContent.ctaBanner as SiteContentHomepage['ctaBanner'],
-      }
-      howItWorksContent = {
-        steps: siteContent.steps as SiteContentHowItWorks['steps'],
-      }
-    } catch {
-      // Use defaults if Global not populated yet
-    }
-
-    // Fetch categories and all products in 2 queries (not N+1)
-    const [categoryResult, allProducts] = await Promise.all([
-      payload.find({
-        collection: 'categories',
-        sort: 'displayOrder',
-        limit: 20,
-        depth: 0,
-      }),
-      payload.find({
-        collection: 'products',
-        limit: 200,
-        depth: 1,
-        sort: '-createdAt',
-      }),
-    ])
-
-    // Group products by category in JS
-    const productsByCategory = new Map<number, typeof allProducts.docs>()
-    for (const product of allProducts.docs) {
-      const catId = typeof product.category === 'object' ? product.category?.id : product.category
-      if (catId != null) {
-        const existing = productsByCategory.get(catId as number) ?? []
-        existing.push(product)
-        productsByCategory.set(catId as number, existing)
-      }
-    }
-
-    categories = categoryResult.docs.map((cat) => {
-      const catProducts = productsByCategory.get(cat.id as number) ?? []
-      const firstProduct = catProducts[0]
-      const heroImg = firstProduct?.heroImage && typeof firstProduct.heroImage === 'object'
-        ? (firstProduct.heroImage as Media)
-        : null
-
-      return {
-        id: cat.id as number,
-        title: cat.title as string,
-        slug: cat.slug as string,
-        description: cat.description as string | null | undefined,
-        productCount: catProducts.length,
-        heroImage: heroImg,
-      }
-    })
-  } catch (err) {
-    console.error('Homepage Payload error:', err)
-    hasError = true
-  }
-
-  const hero = content.hero ?? {}
-  const valueProps = content.valueProps?.length ? content.valueProps : defaultValueProps
+  const hero = (siteContent?.hero as SiteContentHomepage['hero']) ?? {}
+  const valueProps = (siteContent?.valueProps as SiteContentHomepage['valueProps'])?.length
+    ? (siteContent!.valueProps as SiteContentHomepage['valueProps'])!
+    : defaultValueProps
   const aboutSummary =
-    content.aboutSummary ||
+    (siteContent?.aboutSummary as string) ||
     'KwikBuilt is an Australian modular home distributor delivering factory-built, site-ready buildings through international manufacturing partnerships. We supply land developers, builders, and sub-distributors across Australia.'
-  const ctaBanner = content.ctaBanner ?? {}
-  const steps = howItWorksContent.steps?.length ? howItWorksContent.steps : defaultSteps
-  const stats = content.stats?.length ? content.stats : defaultStats
+  const ctaBanner = (siteContent?.ctaBanner as SiteContentHomepage['ctaBanner']) ?? {}
+  const steps = (siteContent?.steps as { title: string; description: string }[])?.length
+    ? (siteContent!.steps as { title: string; description: string }[])
+    : defaultSteps
+  const stats = (siteContent?.stats as SiteContentHomepage['stats'])?.length
+    ? (siteContent!.stats as SiteContentHomepage['stats'])!
+    : defaultStats
 
-  const videoUrl = getMediaUrl(content.heroVideo)
-  const posterUrl = getMediaUrl(content.heroPoster)
+  const videoUrl = getMediaUrl(siteContent?.heroVideo as SiteContentHomepage['heroVideo'])
+  const posterUrl = getMediaUrl(siteContent?.heroPoster as SiteContentHomepage['heroPoster'])
 
   return (
     <div>
@@ -230,42 +162,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Product Categories */}
+      {/* Product Categories — streams in with spinner */}
       <section className="py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-6">
-          {hasError && (
-            <div className="border border-amber-200 bg-amber-50 p-6 text-amber-800">
-              <h2 className="font-semibold">Content temporarily unavailable</h2>
-              {process.env.NODE_ENV === 'development' && (
-                <p className="mt-1 text-sm">
-                  Add <code className="font-mono bg-amber-100 px-1">DATABASE_URL</code> and{' '}
-                  <code className="font-mono bg-amber-100 px-1">PAYLOAD_SECRET</code> to your{' '}
-                  <code className="font-mono bg-amber-100 px-1">.env.local</code> file, then
-                  restart the dev server.
-                </p>
-              )}
-            </div>
-          )}
-
-          {!hasError && categories.length > 0 && (
-            <>
-              <AnimateOnScroll className="mb-12">
-                <div className="w-12 h-0.5 bg-primary mb-4" />
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Browse by Category</h2>
-              </AnimateOnScroll>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {categories.map((cat, i) => (
-                  <AnimateOnScroll key={cat.id} delay={i * 100}>
-                    <CategoryCard
-                      category={cat}
-                      productCount={cat.productCount}
-                      heroImage={cat.heroImage}
-                    />
-                  </AnimateOnScroll>
-                ))}
-              </div>
-            </>
-          )}
+          <Suspense fallback={<CategoryGridFallback />}>
+            <CategoryGrid />
+          </Suspense>
         </div>
       </section>
 
