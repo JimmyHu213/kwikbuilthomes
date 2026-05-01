@@ -37,7 +37,6 @@ export default async function ProductsPage() {
           collection: 'products',
           where: {
             category: { equals: cat.id },
-            status: { equals: 'active' },
           },
           limit: 1,
           depth: 1,
