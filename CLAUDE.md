@@ -45,12 +45,15 @@ npm run generate:types  # Regenerate Payload TypeScript types
 - Exception: The footer and dark sections use `bg-[#2D2D2D]` and `text-[#F5F3F0]` as established patterns.
 - Brand palette: Primary Orange (`--primary`), Charcoal (`--foreground`), Gold/Amber (`--accent`), Warm Off-White (`--secondary`), Warm Light Gray (`--muted`), Warm Border (`--border`).
 
-### UI Patterns
+### UI Patterns — Industrial Design Language
+- **No rounded corners** — use `rounded-none` on all cards, buttons, images, containers. No `rounded-lg`, `rounded-xl`, `rounded-full`.
 - Orange accent bars: `<div className="w-12 h-1 bg-primary mb-4" />`
 - Section container: `max-w-7xl mx-auto px-6`
 - Content pages: `max-w-4xl mx-auto px-6`
-- Rounded pill CTAs: `rounded-full bg-primary px-8 py-3`
-- Card style: `rounded-lg border border-border bg-secondary p-8`
+- Sharp CTAs: `bg-primary px-8 py-3 text-sm font-semibold uppercase tracking-wide`
+- Card style: `border border-border hover:border-primary transition-colors`
+- Shadows: minimal. Prefer border definition over drop shadows (`shadow-sm` max).
+- Data/specs: use `font-mono` for numbers, prices, dimensions, counts.
 - Icons from `lucide-react` only.
 
 ### General
