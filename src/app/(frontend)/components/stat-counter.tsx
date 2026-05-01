@@ -46,6 +46,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix: string 
 
     const duration = 1500
     const startTime = performance.now()
+    let frameId: number
 
     function tick(now: number) {
       const elapsed = now - startTime
@@ -53,10 +54,11 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix: string 
       // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3)
       setDisplay(Math.round(eased * value))
-      if (progress < 1) requestAnimationFrame(tick)
+      if (progress < 1) frameId = requestAnimationFrame(tick)
     }
 
-    requestAnimationFrame(tick)
+    frameId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frameId)
   }, [started, value])
 
   return (

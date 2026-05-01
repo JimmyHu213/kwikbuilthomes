@@ -122,7 +122,7 @@ export default async function HomePage() {
       categoryResult.docs.map(async (cat) => {
         const products = await payload.find({
           collection: 'products',
-          where: { category: { equals: cat.id } },
+          where: { category: { equals: cat.id }, status: { equals: 'active' } },
           limit: 1,
           depth: 1,
           sort: '-createdAt',
