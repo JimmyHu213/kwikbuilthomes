@@ -110,38 +110,49 @@ export default async function HomePage() {
       // Use defaults if Global not populated yet
     }
 
-    // Fetch categories with product counts and a representative hero image
-    const categoryResult = await payload.find({
-      collection: 'categories',
-      sort: 'displayOrder',
-      limit: 20,
-      depth: 0,
-    })
-
-    categories = await Promise.all(
-      categoryResult.docs.map(async (cat) => {
-        const products = await payload.find({
-          collection: 'products',
-          where: { category: { equals: cat.id } },
-          limit: 1,
-          depth: 1,
-          sort: '-createdAt',
-        })
-        const firstProduct = products.docs[0]
-        const heroImg = firstProduct?.heroImage && typeof firstProduct.heroImage === 'object'
-          ? (firstProduct.heroImage as Media)
-          : null
-
-        return {
-          id: cat.id as number,
-          title: cat.title as string,
-          slug: cat.slug as string,
-          description: cat.description as string | null | undefined,
-          productCount: products.totalDocs,
-          heroImage: heroImg,
-        }
+    // Fetch categories and all products in 2 queries (not N+1)
+    const [categoryResult, allProducts] = await Promise.all([
+      payload.find({
+        collection: 'categories',
+        sort: 'displayOrder',
+        limit: 20,
+        depth: 0,
       }),
-    )
+      payload.find({
+        collection: 'products',
+        limit: 200,
+        depth: 1,
+        sort: '-createdAt',
+      }),
+    ])
+
+    // Group products by category in JS
+    const productsByCategory = new Map<number, typeof allProducts.docs>()
+    for (const product of allProducts.docs) {
+      const catId = typeof product.category === 'object' ? product.category?.id : product.category
+      if (catId != null) {
+        const existing = productsByCategory.get(catId as number) ?? []
+        existing.push(product)
+        productsByCategory.set(catId as number, existing)
+      }
+    }
+
+    categories = categoryResult.docs.map((cat) => {
+      const catProducts = productsByCategory.get(cat.id as number) ?? []
+      const firstProduct = catProducts[0]
+      const heroImg = firstProduct?.heroImage && typeof firstProduct.heroImage === 'object'
+        ? (firstProduct.heroImage as Media)
+        : null
+
+      return {
+        id: cat.id as number,
+        title: cat.title as string,
+        slug: cat.slug as string,
+        description: cat.description as string | null | undefined,
+        productCount: catProducts.length,
+        heroImage: heroImg,
+      }
+    })
   } catch (err) {
     console.error('Homepage Payload error:', err)
     hasError = true

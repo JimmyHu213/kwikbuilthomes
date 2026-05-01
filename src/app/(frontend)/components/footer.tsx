@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { cache } from 'react'
 import { getPayloadClient } from '@/lib/payload'
 
 type SiteSettingsData = {
@@ -9,7 +10,7 @@ type SiteSettingsData = {
   tagline?: string
 }
 
-async function getSiteSettings(): Promise<SiteSettingsData> {
+const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
   try {
     const payload = await getPayloadClient()
     const settings = await payload.findGlobal({ slug: 'site-settings' })
@@ -29,7 +30,7 @@ async function getSiteSettings(): Promise<SiteSettingsData> {
       tagline: 'Australian-engineered modular homes',
     }
   }
-}
+})
 
 export async function Footer() {
   const settings = await getSiteSettings()
