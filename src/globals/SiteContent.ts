@@ -78,6 +78,7 @@ export const SiteContent: GlobalConfig = {
                   name: 'value',
                   type: 'number',
                   required: true,
+                  min: 0,
                   admin: { description: 'The number to count up to (e.g. 50)' },
                 },
                 {
