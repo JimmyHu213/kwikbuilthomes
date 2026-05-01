@@ -79,13 +79,15 @@ export default async function ProductsPage() {
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
         {hasError && (
           <div className="border border-amber-200 bg-amber-50 p-6 text-amber-800">
-            <h2 className="font-semibold">Database not connected</h2>
-            <p className="mt-1 text-sm">
-              Add <code className="font-mono bg-amber-100 px-1">DATABASE_URL</code> and{' '}
-              <code className="font-mono bg-amber-100 px-1">PAYLOAD_SECRET</code> to your{' '}
-              <code className="font-mono bg-amber-100 px-1">.env.local</code> file, then
-              restart the dev server.
-            </p>
+            <h2 className="font-semibold">Content temporarily unavailable</h2>
+            {process.env.NODE_ENV === 'development' && (
+              <p className="mt-1 text-sm">
+                Add <code className="font-mono bg-amber-100 px-1">DATABASE_URL</code> and{' '}
+                <code className="font-mono bg-amber-100 px-1">PAYLOAD_SECRET</code> to your{' '}
+                <code className="font-mono bg-amber-100 px-1">.env.local</code> file, then
+                restart the dev server.
+              </p>
+            )}
           </div>
         )}
 

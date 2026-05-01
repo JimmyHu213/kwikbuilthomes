@@ -267,7 +267,7 @@ export default async function ProductPage({ params }: Props) {
         )}
 
         {/* Photo Gallery — Carousel */}
-        {allSlides.length > 1 && (
+        {allSlides.length > 0 && (
           <AnimateOnScroll>
             <section className="mb-12">
               <div className="w-12 h-0.5 bg-primary mb-4" />
