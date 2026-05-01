@@ -2,7 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
-import { PageTransition } from "./components/page-transition";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -27,7 +26,7 @@ export default function FrontendLayout({
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<Header />
 				<main className="min-h-screen">
-					<PageTransition>{children}</PageTransition>
+					{children}
 				</main>
 				<Footer />
 			</body>
