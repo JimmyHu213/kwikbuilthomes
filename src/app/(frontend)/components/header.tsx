@@ -4,7 +4,6 @@ import { MobileNav } from './mobile-nav'
 const navLinks = [
   { href: '/products', label: 'Products' },
   { href: '/how-it-works', label: 'How It Works' },
-  { href: '/designer', label: 'Designer' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ]
