@@ -4,7 +4,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { ContactForm } from './contact-form'
 
 export const metadata: Metadata = {
-  title: 'Contact | KwikBuilt Homes',
+  title: 'Contact',
   description: 'Get in touch with KwikBuilt Homes — Australian-engineered modular buildings.',
 }
 

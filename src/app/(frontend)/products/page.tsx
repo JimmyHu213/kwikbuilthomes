@@ -7,7 +7,7 @@ import { CategoryCard } from '../components/category-card'
 import { AnimateOnScroll } from '../components/animate-on-scroll'
 
 export const metadata: Metadata = {
-  title: 'Products | Kwik Built Homes',
+  title: 'Products',
   description:
     'Browse our range of modular homes, kit homes, container homes, tiny homes, sheds, and accessories.',
 }

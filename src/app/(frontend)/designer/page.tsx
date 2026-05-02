@@ -6,7 +6,7 @@ import type { ProductForPlanner } from '@/lib/planner/types'
 import type { Media } from '@/payload-types'
 
 export const metadata: Metadata = {
-  title: 'Designer | KwikBuilt Homes',
+  title: 'Designer',
   description: 'Design your modular housing layout with our interactive 3D designer.',
 }
 

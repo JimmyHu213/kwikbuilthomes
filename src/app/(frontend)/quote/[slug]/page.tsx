@@ -27,11 +27,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!product) return { title: 'Product Not Found' }
 
     return {
-      title: `Request a Quote - ${product.title} | Kwik Built Homes`,
+      title: `Request a Quote - ${product.title}`,
       description: `Request a quote for ${product.title} modular home from Kwik Built Homes`,
     }
   } catch {
-    return { title: 'Request a Quote | Kwik Built Homes' }
+    return { title: 'Request a Quote' }
   }
 }
 
