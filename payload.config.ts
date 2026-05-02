@@ -14,6 +14,7 @@ import { Categories } from './src/collections/Categories'
 import { Media } from './src/collections/Media'
 import { Documents } from './src/collections/Documents'
 import { Quotes } from './src/collections/Quotes'
+import { ProjectGallery } from './src/collections/ProjectGallery'
 import { SiteSettings } from './src/globals/SiteSettings'
 import { SiteContent } from './src/globals/SiteContent'
 
@@ -43,7 +44,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Products, Categories, Media, Documents, Quotes],
+  collections: [Users, Products, Categories, Media, Documents, Quotes, ProjectGallery],
   globals: [SiteSettings, SiteContent],
   db: postgresAdapter({
     push: true,
