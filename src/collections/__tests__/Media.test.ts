@@ -10,7 +10,7 @@ describe('Media collection', () => {
   it('has upload config with correct mimeTypes', () => {
     expect(Media.upload).toBeDefined()
     const upload = Media.upload as Record<string, unknown>
-    expect(upload.mimeTypes).toEqual(['image/*'])
+    expect(upload.mimeTypes).toEqual(['image/*', 'video/mp4'])
   })
 
   it('has three image sizes configured', () => {
