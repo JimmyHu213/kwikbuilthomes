@@ -4,12 +4,12 @@
   /* Override Payload's theme colors with KwikBuilt brand */
   --theme-success-500: #C8962E;
   --theme-success-400: #d4a94e;
-  --theme-text: #2D2D2D;
   --nav-width: 280px;
 }
 
 /* Light mode overrides */
 [data-theme="light"] {
+  --theme-text: #2D2D2D;
   --theme-bg: #F5F3F0;
   --theme-elevation-0: #F5F3F0;
   --theme-elevation-50: #F0EDE8;
@@ -31,8 +31,26 @@
   --color-base-500: #E8611A;
 }
 
-/* Dark mode overrides — keep it professional */
+/* Dark mode overrides */
 [data-theme="dark"] {
+  --theme-bg: #1a1a1a;
+  --theme-text: #f0f0f0;
+  --theme-elevation-0: #1a1a1a;
+  --theme-elevation-50: #222222;
+  --theme-elevation-100: #2a2a2a;
+  --theme-elevation-150: #333333;
+  --theme-elevation-200: #3b3b3b;
+  --theme-elevation-250: #444444;
+  --theme-elevation-300: #4d4d4d;
+  --theme-elevation-350: #555555;
+  --theme-elevation-400: #666666;
+  --theme-elevation-500: #e0e0e0;
+  --theme-elevation-600: #e8e8e8;
+  --theme-elevation-650: #f0f0f0;
+  --theme-elevation-700: #f5f5f5;
+  --theme-elevation-800: #fafafa;
+  --theme-elevation-900: #fdfdfd;
+  --theme-elevation-1000: #ffffff;
   --theme-input-focus-border: #E8611A;
   --color-base-500: #E8611A;
 }
@@ -48,7 +66,7 @@
 }
 
 /* Nav styling */
-.nav {
+[data-theme="light"] .nav {
   border-right-color: #E7E0D8;
 }
 
@@ -58,6 +76,10 @@
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   color: #A89068;
+}
+
+[data-theme="dark"] .nav-group__label {
+  color: #d4a94e;
 }
 
 /* Save/publish buttons */
@@ -81,8 +103,11 @@
 }
 
 /* Improve table styling */
-.table .row-1:nth-child(even) {
+[data-theme="light"] .table .row-1:nth-child(even) {
   background-color: rgba(245, 243, 240, 0.5);
+}
+[data-theme="dark"] .table .row-1:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 /* Pill/tag styling */
