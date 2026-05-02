@@ -37,11 +37,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!product) return { title: 'Product Not Found' }
 
     return {
-      title: `${product.title} | Kwik Built Homes`,
+      title: product.title,
       description: product.excerpt || `${product.title} modular home by Kwik Built Homes`,
     }
   } catch {
-    return { title: 'Product | Kwik Built Homes' }
+    return { title: 'Product' }
   }
 }
 
@@ -160,8 +160,33 @@ export default async function ProductPage({ params }: Props) {
   if (specs.structuralSystem) specRows.push({ label: 'Structural System', value: specs.structuralSystem })
   if (specs.insulationRating) specRows.push({ label: 'Insulation Rating', value: specs.insulationRating })
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.excerpt || product.description?.slice(0, 200),
+    image: heroSrc || undefined,
+    brand: {
+      '@type': 'Brand',
+      name: 'Kwik Built Homes',
+    },
+    ...(product.priceRange?.from ? {
+      offers: {
+        '@type': 'AggregateOffer',
+        priceCurrency: 'AUD',
+        lowPrice: product.priceRange.from,
+        ...(product.priceRange.to ? { highPrice: product.priceRange.to } : {}),
+        availability: 'https://schema.org/InStock',
+      },
+    } : {}),
+  }
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Full-width Hero Image */}
       {heroSrc && (
         <section className="relative w-full">

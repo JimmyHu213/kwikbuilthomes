@@ -26,12 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!category) return { title: 'Category Not Found' }
 
     return {
-      title: `${category.title} | Kwik Built Homes`,
+      title: category.title,
       description:
         category.description || `Browse ${category.title} from Kwik Built Homes`,
     }
   } catch {
-    return { title: 'Category | Kwik Built Homes' }
+    return { title: 'Category' }
   }
 }
 

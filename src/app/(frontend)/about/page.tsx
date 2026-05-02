@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { getPayloadClient } from '@/lib/payload'
 
 export const metadata: Metadata = {
-  title: 'About | KwikBuilt Homes',
+  title: 'About',
   description: 'Learn about KwikBuilt — Australian-engineered modular homes for developers, builders, and sub-distributors.',
 }
 
