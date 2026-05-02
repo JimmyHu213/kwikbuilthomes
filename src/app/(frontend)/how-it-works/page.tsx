@@ -5,7 +5,7 @@ import { MessageSquare, PencilRuler, Factory, Truck } from 'lucide-react'
 import type { ComponentType } from 'react'
 
 export const metadata: Metadata = {
-  title: 'How It Works | KwikBuilt Homes',
+  title: 'How It Works',
   description: 'From enquiry to delivery — learn how KwikBuilt modular homes are built and delivered.',
 }
 

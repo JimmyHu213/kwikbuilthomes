@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { Header } from "./components/header";
@@ -12,6 +13,24 @@ const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
 	subsets: ["latin"],
 });
+
+export const metadata: Metadata = {
+	title: {
+		default: 'Kwik Built Homes | Australian Modular Homes for Developers & Builders',
+		template: '%s | Kwik Built Homes',
+	},
+	description: 'Australian-engineered modular homes for developers, builders, and sub-distributors. Browse our catalog, configure options, and request quotes.',
+	metadataBase: new URL('https://kwikbuilthomes.com.au'),
+	openGraph: {
+		type: 'website',
+		locale: 'en_AU',
+		siteName: 'Kwik Built Homes',
+	},
+	robots: {
+		index: true,
+		follow: true,
+	},
+}
 
 export default function FrontendLayout({
 	children,

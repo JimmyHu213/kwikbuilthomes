@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { GeneralQuoteForm } from './general-quote-form'
 
 export const metadata: Metadata = {
-  title: 'Request a Quote | KwikBuilt Homes',
+  title: 'Request a Quote',
   description: 'Request a quote for modular homes, kit homes, container homes, and more from KwikBuilt Homes.',
 }
 
