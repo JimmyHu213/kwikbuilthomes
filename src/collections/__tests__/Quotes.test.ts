@@ -105,11 +105,13 @@ describe('Quotes collection', () => {
     expect(modelMix).toMatchObject({ type: 'json' })
   })
 
-  it('has correct access control: create is public, read/update/delete require user', () => {
+  it('has correct access control: create is blocked via API, read/update/delete require user', () => {
     const access = Quotes.access!
     type AccessFn = (...args: unknown[]) => unknown
-    // create returns true (public)
-    expect((access.create as unknown as AccessFn)({ req: {} })).toBe(true)
+    // create returns false — quotes are created via server actions through the
+    // Local API (which bypasses access control), never the public REST API
+    expect((access.create as unknown as AccessFn)({ req: {} })).toBe(false)
+    expect((access.create as unknown as AccessFn)({ req: { user: { id: 1 } } })).toBe(false)
     // read/update/delete require user
     expect((access.read as unknown as AccessFn)({ req: { user: null } })).toBeFalsy()
     expect((access.read as unknown as AccessFn)({ req: { user: { id: 1 } } })).toBeTruthy()

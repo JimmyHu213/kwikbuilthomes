@@ -5,6 +5,11 @@ export const Media: CollectionConfig = {
   admin: {
     group: 'Uploads',
   },
+  access: {
+    // Public read: product photos and videos must be visible to anonymous visitors.
+    // Create/update/delete stay default (authenticated only).
+    read: () => true,
+  },
   upload: {
     imageSizes: [
       {

@@ -6,6 +6,11 @@ export const Documents: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Uploads',
   },
+  access: {
+    // Public read: compliance PDFs, specs, and brochures must be downloadable
+    // by anonymous visitors. Create/update/delete stay default (authenticated only).
+    read: () => true,
+  },
   upload: {
     mimeTypes: ['application/pdf'],
   },

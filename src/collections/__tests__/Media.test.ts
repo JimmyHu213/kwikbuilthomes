@@ -62,6 +62,16 @@ describe('Media collection', () => {
     expect(hero!.width).toBe(1920)
   })
 
+  it('allows public read access for anonymous visitors', () => {
+    const access = Media.access!
+    type AccessFn = (...args: unknown[]) => unknown
+    expect((access.read as unknown as AccessFn)({ req: { user: null } })).toBe(true)
+    // create/update/delete stay default (authenticated only)
+    expect(access.create).toBeUndefined()
+    expect(access.update).toBeUndefined()
+    expect(access.delete).toBeUndefined()
+  })
+
   it('has alt text field that is required', () => {
     const altField = Media.fields.find(
       (f): f is Field & { name: string } => 'name' in f && f.name === 'alt',
