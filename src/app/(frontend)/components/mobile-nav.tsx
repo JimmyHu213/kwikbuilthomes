@@ -19,8 +19,11 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ]
 
-export function MobileNav() {
+export function MobileNav({ showProjects = true }: { showProjects?: boolean }) {
   const [open, setOpen] = useState(false)
+  const visibleLinks = navLinks.filter(
+    (link) => link.href !== '/projects' || showProjects,
+  )
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -35,7 +38,7 @@ export function MobileNav() {
           <span className="ml-1 text-xs font-medium text-muted-foreground">HOMES</span>
         </SheetTitle>
         <nav className="flex flex-col gap-1 mt-4">
-          {navLinks.map((link) => (
+          {visibleLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}

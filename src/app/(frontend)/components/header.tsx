@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { MobileNav } from './mobile-nav'
+import { getCachedProjectCount } from '@/lib/cached-data'
 
 const navLinks = [
   { href: '/products', label: 'Products' },
@@ -9,7 +10,13 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ]
 
-export function Header() {
+export async function Header() {
+  // Hide the Projects link entirely when there are no published projects.
+  const projectCount = await getCachedProjectCount()
+  const visibleLinks = navLinks.filter(
+    (link) => link.href !== '/projects' || projectCount > 0,
+  )
+
   return (
     <header className="border-b border-border bg-white">
       <nav className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -20,7 +27,7 @@ export function Header() {
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
+          {visibleLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -38,7 +45,7 @@ export function Header() {
         </div>
 
         <div className="md:hidden">
-          <MobileNav />
+          <MobileNav showProjects={projectCount > 0} />
         </div>
       </nav>
     </header>

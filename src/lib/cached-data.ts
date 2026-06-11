@@ -36,6 +36,22 @@ export const getCachedSiteSettings = unstable_cache(
   { revalidate: CACHE_TTL_SECONDS },
 )
 
+// Number of published project-gallery entries — used to hide the Projects nav
+// link when there are none. Matches the listing query (drafts excluded by default).
+export const getCachedProjectCount = unstable_cache(
+  async (): Promise<number> => {
+    try {
+      const payload = await getPayloadClient()
+      const result = await payload.count({ collection: 'project-gallery' })
+      return result.totalDocs
+    } catch {
+      return 0
+    }
+  },
+  ['project-gallery-count'],
+  { revalidate: CACHE_TTL_SECONDS },
+)
+
 export type CategoryWithProducts = {
   id: number
   title: string
