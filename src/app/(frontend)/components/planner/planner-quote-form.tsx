@@ -28,6 +28,8 @@ export function PlannerQuoteForm() {
   const [state, formAction, pending] = useActionState(submitPlannerQuote, initialState)
   const [bom, setBom] = useState<LayoutBom | null>(null)
   const [screenshot, setScreenshot] = useState<string | null>(null)
+  // Time-trap: capture render time once so the action can reject instant bot submits.
+  const [formRenderedAt] = useState(() => Date.now())
 
   useEffect(() => {
     const bomData = sessionStorage.getItem('plannerBom')
@@ -71,6 +73,13 @@ export function PlannerQuoteForm() {
       {state.message && !state.success && (
         <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{state.message}</div>
       )}
+
+      {/* Honeypot: visually hidden, off-screen, not type=hidden. Real users never fill it. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden">
+        <label htmlFor="website">Leave this field empty</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+      <input type="hidden" name="formRenderedAt" value={formRenderedAt} />
 
       <input type="hidden" name="layoutData" value={JSON.stringify(bom.lineItems)} />
       <input type="hidden" name="totalFloorArea" value={bom.totalFloorArea} />
