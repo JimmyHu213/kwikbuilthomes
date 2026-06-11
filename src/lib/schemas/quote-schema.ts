@@ -12,15 +12,20 @@ export const timelineOptions = ['immediate', 'short', 'medium', 'long', 'explori
  *   => { cladding: ['timber'], extras: ['deck', 'carport'] }
  */
 export function parseQuoteParams(
-  searchParams: Record<string, string>,
+  searchParams: Record<string, string | string[] | undefined>,
 ): Record<string, string[]> {
   const selections: Record<string, string[]> = {}
 
   for (const [key, value] of Object.entries(searchParams)) {
-    if (key.startsWith('opt_')) {
-      const categoryId = key.slice(4)
-      selections[categoryId] = value.split(',')
-    }
+    if (!key.startsWith('opt_')) continue
+    if (value === undefined) continue
+
+    const categoryId = key.slice(4)
+    // Next.js delivers repeated query params (?opt_x=a&opt_x=b) as a string[],
+    // single params as a string. Normalize both to a comma-split list.
+    selections[categoryId] = Array.isArray(value)
+      ? value.flatMap((v) => v.split(','))
+      : value.split(',')
   }
 
   return selections

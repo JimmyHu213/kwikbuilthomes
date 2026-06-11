@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import type { OptionCategoryData } from '@/lib/configuration'
 import { computeConfigTotal } from '@/lib/configuration'
-import { toggleSingle, toggleMultiple, hasSelections } from '../../(frontend)/components/product-configurator'
+import { toggleSingle, toggleMultiple, hasSelections, formatPriceModifier } from '../../(frontend)/components/product-configurator'
 
 // --- Fixtures ---
 
@@ -94,6 +94,20 @@ describe('hasSelections', () => {
   it('returns false when all categories have empty arrays', () => {
     // This should not normally occur due to cleanup, but test for safety
     expect(hasSelections({ cladding: [] })).toBe(false)
+  })
+})
+
+describe('formatPriceModifier', () => {
+  it('prefixes positive modifiers with +$', () => {
+    expect(formatPriceModifier(5000)).toBe('+$5,000')
+  })
+
+  it('prefixes negative modifiers (downgrades) with -$, not +$-', () => {
+    expect(formatPriceModifier(-5000)).toBe('-$5,000')
+  })
+
+  it('renders zero without a sign', () => {
+    expect(formatPriceModifier(0)).toBe('$0')
   })
 })
 

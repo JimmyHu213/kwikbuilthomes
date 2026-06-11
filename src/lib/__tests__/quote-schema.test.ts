@@ -40,6 +40,38 @@ describe('parseQuoteParams', () => {
       cladding: ['steel'],
     })
   })
+
+  it('handles repeated query params delivered as a string array', () => {
+    // Next.js delivers ?opt_extras=deck&opt_extras=carport as a string[]
+    const params: Record<string, string | string[] | undefined> = {
+      opt_extras: ['deck', 'carport'],
+    }
+    const result = parseQuoteParams(params)
+    expect(result).toEqual({
+      extras: ['deck', 'carport'],
+    })
+  })
+
+  it('flat-maps comma-joined values inside a repeated string array', () => {
+    const params: Record<string, string | string[] | undefined> = {
+      opt_extras: ['deck,carport', 'solar'],
+    }
+    const result = parseQuoteParams(params)
+    expect(result).toEqual({
+      extras: ['deck', 'carport', 'solar'],
+    })
+  })
+
+  it('skips undefined param values', () => {
+    const params: Record<string, string | string[] | undefined> = {
+      opt_cladding: undefined,
+      opt_extras: 'deck',
+    }
+    const result = parseQuoteParams(params)
+    expect(result).toEqual({
+      extras: ['deck'],
+    })
+  })
 })
 
 describe('quoteFormSchema', () => {
