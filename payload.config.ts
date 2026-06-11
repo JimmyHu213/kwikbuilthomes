@@ -6,6 +6,8 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 // import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { en } from '@payloadcms/translations/languages/en'
+import { zh } from '@payloadcms/translations/languages/zh'
 import sharp from 'sharp'
 
 import { Users } from './src/collections/Users'
@@ -66,6 +68,12 @@ if (!smtpHost) {
 }
 
 export default buildConfig({
+  // Admin UI language: each admin user can switch between English and 简体中文
+  // from their account settings. Defaults to English.
+  i18n: {
+    fallbackLanguage: 'en',
+    supportedLanguages: { en, zh },
+  },
   admin: {
     user: Users.slug,
     importMap: {
