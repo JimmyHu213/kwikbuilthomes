@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateOnChange, revalidateOnDelete } from '@/lib/revalidate'
 
 export const ProjectGallery: CollectionConfig = {
   slug: 'project-gallery',
@@ -6,6 +7,10 @@ export const ProjectGallery: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'location', 'product', 'completionDate'],
     group: 'Content',
+  },
+  hooks: {
+    afterChange: [revalidateOnChange(['projects'])],
+    afterDelete: [revalidateOnDelete(['projects'])],
   },
   fields: [
     {

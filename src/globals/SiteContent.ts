@@ -1,10 +1,14 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateGlobal } from '@/lib/revalidate'
 
 export const SiteContent: GlobalConfig = {
   slug: 'site-content',
   label: 'Site Content',
   admin: {
     group: 'Site',
+  },
+  hooks: {
+    afterChange: [revalidateGlobal(['site-content'])],
   },
   fields: [
     {
