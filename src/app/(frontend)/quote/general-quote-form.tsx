@@ -19,6 +19,8 @@ const errorClassName = 'text-sm text-red-600 mt-1'
 export function GeneralQuoteForm() {
   const [state, formAction, pending] = useActionState(submitGeneralQuote, initialState)
   const [isEstateInquiry, setIsEstateInquiry] = useState(false)
+  // Time-trap: capture render time once so the action can reject instant bot submits.
+  const [formRenderedAt] = useState(() => Date.now())
 
   if (state.success) {
     return (
@@ -35,6 +37,13 @@ export function GeneralQuoteForm() {
   return (
     <form action={formAction} className="space-y-8">
       {state.message && !state.success && (<div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{state.message}</div>)}
+
+      {/* Honeypot: visually hidden, off-screen, not type=hidden. Real users never fill it. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden">
+        <label htmlFor="website">Leave this field empty</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+      <input type="hidden" name="formRenderedAt" value={formRenderedAt} />
 
       <fieldset>
         <legend className="text-lg font-semibold text-foreground mb-4">Contact Information</legend>

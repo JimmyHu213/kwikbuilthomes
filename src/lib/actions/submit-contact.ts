@@ -4,6 +4,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { contactFormSchema } from '@/lib/schemas/contact-schema'
 import { buildContactBuyerConfirmationEmail } from '@/lib/email/contact-confirmation'
 import { buildContactAdminNotificationEmail } from '@/lib/email/contact-notification'
+import { rateLimitRequest, isHoneypotTripped, isTooFast } from '@/lib/rate-limit'
 
 export type ContactActionState = {
   success: boolean
@@ -16,6 +17,16 @@ export async function submitContact(
   prevState: ContactActionState,
   formData: FormData,
 ): Promise<ContactActionState> {
+  // Spam/abuse protection: rate-limit -> honeypot -> time-trap.
+  const { allowed } = await rateLimitRequest()
+  if (!allowed) {
+    return { success: false, message: 'Too many requests, please try again shortly.' }
+  }
+  // Silent success (matches the real success shape) so bots get no signal.
+  if (isHoneypotTripped(formData) || isTooFast(formData)) {
+    return { success: true, message: 'Your inquiry has been submitted.' }
+  }
+
   const raw = {
     contactName: formData.get('contactName'),
     contactEmail: formData.get('contactEmail'),

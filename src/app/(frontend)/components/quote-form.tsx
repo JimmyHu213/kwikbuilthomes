@@ -43,6 +43,8 @@ export function QuoteForm({
 }: QuoteFormProps) {
   const [state, formAction, pending] = useActionState(submitQuote, initialState)
   const [isEstateInquiry, setIsEstateInquiry] = useState(false)
+  // Time-trap: capture render time once so the action can reject instant bot submits.
+  const [formRenderedAt] = useState(() => Date.now())
 
   // Success state
   if (state.success) {
@@ -76,6 +78,13 @@ export function QuoteForm({
           {state.message}
         </div>
       )}
+
+      {/* Honeypot: visually hidden, off-screen, not type=hidden. Real users never fill it. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden">
+        <label htmlFor="website">Leave this field empty</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+      <input type="hidden" name="formRenderedAt" value={formRenderedAt} />
 
       {/* Hidden fields */}
       <input type="hidden" name="productId" value={productId} />

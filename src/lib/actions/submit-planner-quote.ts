@@ -4,6 +4,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { plannerQuoteFormSchema } from '@/lib/schemas/planner-quote-schema'
 import { buildPlannerBuyerConfirmationEmail } from '@/lib/email/planner-quote-confirmation'
 import { buildPlannerAdminNotificationEmail } from '@/lib/email/planner-quote-notification'
+import { rateLimitRequest, isHoneypotTripped, isTooFast } from '@/lib/rate-limit'
 
 export type PlannerQuoteActionState = {
   success: boolean
@@ -16,6 +17,15 @@ export async function submitPlannerQuote(
   prevState: PlannerQuoteActionState,
   formData: FormData,
 ): Promise<PlannerQuoteActionState> {
+  // Spam/abuse protection: rate-limit -> honeypot -> time-trap.
+  const { allowed } = await rateLimitRequest()
+  if (!allowed) {
+    return { success: false, message: 'Too many requests, please try again shortly.' }
+  }
+  if (isHoneypotTripped(formData) || isTooFast(formData)) {
+    return { success: true, message: 'Quote request submitted successfully!' }
+  }
+
   const raw = {
     layoutData: formData.get('layoutData'),
     totalFloorArea: formData.get('totalFloorArea'),

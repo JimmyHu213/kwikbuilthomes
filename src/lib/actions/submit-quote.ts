@@ -4,6 +4,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { quoteFormSchema } from '@/lib/schemas/quote-schema'
 import { buildBuyerConfirmationEmail } from '@/lib/email/quote-confirmation'
 import { buildAdminNotificationEmail } from '@/lib/email/quote-notification'
+import { rateLimitRequest, isHoneypotTripped, isTooFast } from '@/lib/rate-limit'
 
 export type QuoteActionState = {
   success: boolean
@@ -16,6 +17,16 @@ export async function submitQuote(
   prevState: QuoteActionState,
   formData: FormData,
 ): Promise<QuoteActionState> {
+  // 0. Spam/abuse protection: rate-limit -> honeypot -> time-trap.
+  const { allowed } = await rateLimitRequest()
+  if (!allowed) {
+    return { success: false, message: 'Too many requests, please try again shortly.' }
+  }
+  // Bot-tripped checks silently succeed so bots get no signal to adapt.
+  if (isHoneypotTripped(formData) || isTooFast(formData)) {
+    return { success: true, message: 'Quote request submitted successfully!' }
+  }
+
   // 1. Extract fields from FormData
   const raw = {
     productId: formData.get('productId'),

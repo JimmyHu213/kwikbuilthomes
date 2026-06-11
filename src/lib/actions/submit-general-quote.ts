@@ -4,6 +4,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { generalQuoteFormSchema } from '@/lib/schemas/general-quote-schema'
 import { buildGeneralQuoteBuyerConfirmationEmail } from '@/lib/email/general-quote-confirmation'
 import { buildGeneralQuoteAdminNotificationEmail } from '@/lib/email/general-quote-notification'
+import { rateLimitRequest, isHoneypotTripped, isTooFast } from '@/lib/rate-limit'
 
 export type GeneralQuoteActionState = {
   success: boolean
@@ -16,6 +17,15 @@ export async function submitGeneralQuote(
   prevState: GeneralQuoteActionState,
   formData: FormData,
 ): Promise<GeneralQuoteActionState> {
+  // Spam/abuse protection: rate-limit -> honeypot -> time-trap.
+  const { allowed } = await rateLimitRequest()
+  if (!allowed) {
+    return { success: false, message: 'Too many requests, please try again shortly.' }
+  }
+  if (isHoneypotTripped(formData) || isTooFast(formData)) {
+    return { success: true, message: 'Quote request submitted successfully!' }
+  }
+
   const raw = {
     contactName: formData.get('contactName'),
     contactEmail: formData.get('contactEmail'),
