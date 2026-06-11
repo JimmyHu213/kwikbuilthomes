@@ -19,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const payload = await getPayloadClient()
 
     // Products
-    const products = await payload.find({ collection: 'products', limit: 1000, depth: 0 })
+    const products = await payload.find({ collection: 'products', where: { status: { equals: 'active' } }, limit: 1000, depth: 0 })
     const productPages = products.docs.map((product) => ({
       url: `${baseUrl}/products/${product.slug}`,
       lastModified: new Date(product.updatedAt),
