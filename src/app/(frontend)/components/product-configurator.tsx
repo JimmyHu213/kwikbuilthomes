@@ -58,6 +58,15 @@ export function hasSelections(selections: Record<string, string[]>): boolean {
   return Object.values(selections).some((ids) => ids.length > 0)
 }
 
+/**
+ * Sign-aware price modifier formatting. Modifiers can be negative (downgrades),
+ * so we render the sign before the dollar amount: +$5,000 / -$5,000 / $0.
+ */
+export function formatPriceModifier(modifier: number): string {
+  const sign = modifier > 0 ? '+' : modifier < 0 ? '-' : ''
+  return `${sign}$${Math.abs(modifier).toLocaleString()}`
+}
+
 // --- Component ---
 
 type ProductConfiguratorProps = {
@@ -179,7 +188,7 @@ export function ProductConfigurator({
                       </span>
                     ) : (
                       <span className="mt-1 text-sm font-medium text-foreground">
-                        +${option.priceModifier.toLocaleString()}
+                        {formatPriceModifier(option.priceModifier)}
                       </span>
                     )}
                   </div>
@@ -212,7 +221,7 @@ export function ProductConfigurator({
                           {opt.name}
                           {opt.priceModifier != null && opt.priceModifier !== 0 && (
                             <span className="ml-2 text-muted-foreground">
-                              +${opt.priceModifier.toLocaleString()}
+                              {formatPriceModifier(opt.priceModifier)}
                             </span>
                           )}
                           {(opt.priceModifier == null || opt.priceModifier === 0) && (

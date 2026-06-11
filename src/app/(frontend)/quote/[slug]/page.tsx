@@ -9,7 +9,7 @@ import { QuoteForm } from '../../components/quote-form'
 
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<Record<string, string>>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
