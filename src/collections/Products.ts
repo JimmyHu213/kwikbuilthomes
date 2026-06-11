@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { complianceFields } from '../fields/compliance'
 import { specificationFields } from '../fields/specifications'
+import { revalidateOnChange, revalidateOnDelete } from '@/lib/revalidate'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -11,6 +12,10 @@ export const Products: CollectionConfig = {
   },
   versions: {
     drafts: true,
+  },
+  hooks: {
+    afterChange: [revalidateOnChange(['catalog'])],
+    afterDelete: [revalidateOnDelete(['catalog'])],
   },
   fields: [
     {

@@ -34,7 +34,7 @@ const getCachedProjects = unstable_cache(
   // Data-layer TTL aligned with the route-level `revalidate = 300` above, which is
   // what actually triggers the page re-render.
   ['project-gallery-listing'],
-  { revalidate: 300 },
+  { revalidate: 300, tags: ['projects'] },
 )
 
 export default async function ProjectsPage() {

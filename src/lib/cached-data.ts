@@ -2,14 +2,26 @@ import { unstable_cache } from 'next/cache'
 import { getPayloadClient } from '@/lib/payload'
 import type { Media } from '@/payload-types'
 
-// NOTE: These unstable_cache TTLs only refresh the data-layer cache. What actually
-// triggers a page re-render is the route-level `export const revalidate = 300` (ISR)
-// on each page/layout that consumes these helpers. Keep these TTLs ≤ 300 so a
-// revalidated route picks up fresh CMS data.
+// NOTE: These tags pair with afterChange hooks (src/lib/revalidate.ts) so a CMS save
+// clears the matching cache on demand — edits appear within seconds instead of waiting
+// out the TTL. The route-level `export const revalidate = 300` (ISR) on each consuming
+// page/layout is the fallback that re-renders if a hook is ever missed.
 const CACHE_TTL_SECONDS = 300
 
+// In development, skip the data cache entirely so content edits show on the next
+// request — `revalidateTag` doesn't reliably clear unstable_cache under `next dev`.
+// Production keeps the cache plus on-demand revalidation.
+const isDev = process.env.NODE_ENV === 'development'
+function cached<T>(
+  fn: () => Promise<T>,
+  keyParts: string[],
+  opts: { revalidate: number; tags: string[] },
+): () => Promise<T> {
+  return isDev ? fn : unstable_cache(fn, keyParts, opts)
+}
+
 // Cache SiteContent for 5 minutes — rarely changes
-export const getCachedSiteContent = unstable_cache(
+export const getCachedSiteContent = cached(
   async () => {
     try {
       const payload = await getPayloadClient()
@@ -19,11 +31,11 @@ export const getCachedSiteContent = unstable_cache(
     }
   },
   ['site-content'],
-  { revalidate: CACHE_TTL_SECONDS },
+  { revalidate: CACHE_TTL_SECONDS, tags: ['site-content'] },
 )
 
 // Cache SiteSettings for 5 minutes — rarely changes
-export const getCachedSiteSettings = unstable_cache(
+export const getCachedSiteSettings = cached(
   async () => {
     try {
       const payload = await getPayloadClient()
@@ -33,12 +45,12 @@ export const getCachedSiteSettings = unstable_cache(
     }
   },
   ['site-settings'],
-  { revalidate: CACHE_TTL_SECONDS },
+  { revalidate: CACHE_TTL_SECONDS, tags: ['site-settings'] },
 )
 
 // Number of published project-gallery entries — used to hide the Projects nav
 // link when there are none. Matches the listing query (drafts excluded by default).
-export const getCachedProjectCount = unstable_cache(
+export const getCachedProjectCount = cached(
   async (): Promise<number> => {
     try {
       const payload = await getPayloadClient()
@@ -49,7 +61,7 @@ export const getCachedProjectCount = unstable_cache(
     }
   },
   ['project-gallery-count'],
-  { revalidate: CACHE_TTL_SECONDS },
+  { revalidate: CACHE_TTL_SECONDS, tags: ['projects'] },
 )
 
 export type CategoryWithProducts = {
@@ -62,7 +74,7 @@ export type CategoryWithProducts = {
 }
 
 // Cache categories with product data — aligned with route-level revalidate
-export const getCachedCategories = unstable_cache(
+export const getCachedCategories = cached(
   async (): Promise<CategoryWithProducts[]> => {
     try {
       const payload = await getPayloadClient()
@@ -113,5 +125,5 @@ export const getCachedCategories = unstable_cache(
     }
   },
   ['categories-with-products'],
-  { revalidate: CACHE_TTL_SECONDS },
+  { revalidate: CACHE_TTL_SECONDS, tags: ['catalog'] },
 )
