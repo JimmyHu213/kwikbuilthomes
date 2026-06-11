@@ -28,8 +28,15 @@ const dirname = path.dirname(filename)
 // product, so in production we fail hard instead of losing email silently.
 const smtpHost = process.env.SMTP_HOST
 
+// On Vercel, NODE_ENV is 'production' for preview builds too — gate on VERCEL_ENV
+// so PR previews can build without SMTP (emails captured by Ethereal), while real
+// production deploys fail hard until SMTP is configured.
+const isRealProduction = process.env.VERCEL_ENV
+  ? process.env.VERCEL_ENV === 'production'
+  : process.env.NODE_ENV === 'production'
+
 if (!smtpHost) {
-  if (process.env.NODE_ENV === 'production') {
+  if (isRealProduction) {
     throw new Error(
       'SMTP_HOST is not set in a production environment. Refusing to start: ' +
         'without SMTP transport options, @payloadcms/email-nodemailer silently routes ' +
