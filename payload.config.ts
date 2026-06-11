@@ -27,7 +27,16 @@ const dirname = path.dirname(filename)
 // real recipient. Quote confirmations/notifications are the core of this
 // product, so in production we fail hard instead of losing email silently.
 const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL || ''
-const isLocalDatabase = /@(localhost|127\.0\.0\.1)[:/]/.test(databaseUrl)
+// Parse the host so detection works with or without credentials in the URL
+// (e.g. postgres://localhost/db as well as postgres://user:pass@localhost/db).
+const isLocalDatabase = (() => {
+  try {
+    const host = new URL(databaseUrl).hostname
+    return host === 'localhost' || host === '127.0.0.1'
+  } catch {
+    return false
+  }
+})()
 
 const smtpHost = process.env.SMTP_HOST
 
