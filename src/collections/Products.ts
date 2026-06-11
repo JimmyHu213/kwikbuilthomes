@@ -78,6 +78,9 @@ export const Products: CollectionConfig = {
               name: 'status',
               type: 'select',
               defaultValue: 'draft',
+              // Distinct enum name: without it the Postgres adapter maps this field
+              // and the drafts-internal _status column to the same enum type
+              enumName: 'enum_products_listing_status',
               options: [
                 { label: 'Draft', value: 'draft' },
                 { label: 'Active', value: 'active' },

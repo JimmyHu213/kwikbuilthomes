@@ -7,18 +7,19 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_products_applicable_states" AS ENUM('NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT');
   CREATE TYPE "public"."enum_products_certifications_type" AS ENUM('structural', 'electrical', 'plumbing', 'fire-safety', 'energy-efficiency', 'other');
   CREATE TYPE "public"."enum_products_option_categories_selection_type" AS ENUM('single', 'multiple');
-  CREATE TYPE "public"."enum_products_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_products_listing_status" AS ENUM('draft', 'active', 'discontinued');
   CREATE TYPE "public"."enum_products_ncc_classification" AS ENUM('1a', '1b', '2', '3', '10a');
   CREATE TYPE "public"."enum_products_wind_region" AS ENUM('A', 'B', 'C', 'D');
   CREATE TYPE "public"."enum_products_bal_rating" AS ENUM('BAL-LOW', 'BAL-12.5', 'BAL-19', 'BAL-29', 'BAL-40', 'BAL-FZ');
+  CREATE TYPE "public"."enum_products_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__products_v_version_gallery_category" AS ENUM('exterior', 'interior', 'detail', 'lifestyle');
   CREATE TYPE "public"."enum__products_v_version_applicable_states" AS ENUM('NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT');
   CREATE TYPE "public"."enum__products_v_version_certifications_type" AS ENUM('structural', 'electrical', 'plumbing', 'fire-safety', 'energy-efficiency', 'other');
   CREATE TYPE "public"."enum__products_v_version_option_categories_selection_type" AS ENUM('single', 'multiple');
-  CREATE TYPE "public"."enum__products_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__products_v_version_ncc_classification" AS ENUM('1a', '1b', '2', '3', '10a');
   CREATE TYPE "public"."enum__products_v_version_wind_region" AS ENUM('A', 'B', 'C', 'D');
   CREATE TYPE "public"."enum__products_v_version_bal_rating" AS ENUM('BAL-LOW', 'BAL-12.5', 'BAL-19', 'BAL-29', 'BAL-40', 'BAL-FZ');
+  CREATE TYPE "public"."enum__products_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_documents_document_type" AS ENUM('compliance', 'specification', 'brochure', 'other');
   CREATE TYPE "public"."enum_quotes_source" AS ENUM('product-page', 'planner', 'contact', 'general');
   CREATE TYPE "public"."enum_quotes_status" AS ENUM('new', 'pending', 'responded', 'won', 'lost');
@@ -114,7 +115,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"price_range_from" numeric,
   	"price_range_to" numeric,
   	"price_range_label" varchar,
-  	"status" "enum_products_status" DEFAULT 'draft',
+  	"status" "enum_products_listing_status" DEFAULT 'draft',
   	"hero_image_id" integer,
   	"dimensions_length" numeric,
   	"dimensions_width" numeric,
@@ -204,7 +205,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"version_price_range_from" numeric,
   	"version_price_range_to" numeric,
   	"version_price_range_label" varchar,
-  	"version_status" "enum__products_v_version_status" DEFAULT 'draft',
+  	"version_status" "enum_products_listing_status" DEFAULT 'draft',
   	"version_hero_image_id" integer,
   	"version_dimensions_length" numeric,
   	"version_dimensions_width" numeric,
@@ -678,18 +679,19 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_products_applicable_states";
   DROP TYPE "public"."enum_products_certifications_type";
   DROP TYPE "public"."enum_products_option_categories_selection_type";
-  DROP TYPE "public"."enum_products_status";
+  DROP TYPE "public"."enum_products_listing_status";
   DROP TYPE "public"."enum_products_ncc_classification";
   DROP TYPE "public"."enum_products_wind_region";
   DROP TYPE "public"."enum_products_bal_rating";
+  DROP TYPE "public"."enum_products_status";
   DROP TYPE "public"."enum__products_v_version_gallery_category";
   DROP TYPE "public"."enum__products_v_version_applicable_states";
   DROP TYPE "public"."enum__products_v_version_certifications_type";
   DROP TYPE "public"."enum__products_v_version_option_categories_selection_type";
-  DROP TYPE "public"."enum__products_v_version_status";
   DROP TYPE "public"."enum__products_v_version_ncc_classification";
   DROP TYPE "public"."enum__products_v_version_wind_region";
   DROP TYPE "public"."enum__products_v_version_bal_rating";
+  DROP TYPE "public"."enum__products_v_version_status";
   DROP TYPE "public"."enum_documents_document_type";
   DROP TYPE "public"."enum_quotes_source";
   DROP TYPE "public"."enum_quotes_status";

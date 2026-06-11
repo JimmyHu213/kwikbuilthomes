@@ -36,15 +36,14 @@ to the documented plain `payload migrate` and takes ~10 ms.
 
 Notes:
 
-- `.payload-config-compiled.mjs` is a build artifact — do not commit it (add to `.gitignore`).
-- `esbuild` is currently available transitively (via `drizzle-kit`). If it ever disappears from
-  `node_modules/.bin`, add it as a devDependency.
+- `.payload-config-compiled.mjs` is a build artifact — it is gitignored, do not commit it.
+- `esbuild` is a direct devDependency in `package.json`.
 - The CLI must be run with env loaded: `set -a && source .env.local && set +a` first.
 
 ## One-time: adopting migrations on the EXISTING production database
 
 > **The production Supabase DB already has the full schema** (it was created by dev-mode push
-> sessions). The initial migration `migrations/20260611_033022_initial.ts` must therefore be
+> sessions). The initial migration `migrations/20260611_040147_initial.ts` must therefore be
 > **marked as applied, never executed**, against production. Executing it would fail on
 > existing tables — and `migrate:fresh` would **drop all production data**.
 
@@ -80,13 +79,30 @@ directly from how the adapter works:
 
    -- mark the initial migration as already applied (schema already exists)
    INSERT INTO payload_migrations (name, batch, created_at, updated_at)
-   VALUES ('20260611_033022_initial', 1, now(), now());
+   VALUES ('20260611_040147_initial', 1, now(), now());
 
    -- remove dev-push markers so `payload migrate` never raises the data-loss prompt in CI
    DELETE FROM payload_migrations WHERE batch = -1;
    ```
 
    The `name` must exactly match the migration filename without extension.
+
+   **Enum alignment check:** the product `status` field now declares an explicit
+   `enumName: 'enum_products_listing_status'` (without it, the adapter mapped the field and the
+   drafts-internal `_status` column onto the same enum type). A production DB push-managed
+   *before* this change may carry the old enum name. Verify before marking applied:
+
+   ```sql
+   SELECT t.typname, array_agg(e.enumlabel ORDER BY e.enumsortorder) AS values
+   FROM pg_type t JOIN pg_enum e ON e.enumtypid = t.oid
+   WHERE t.typname LIKE '%products%status%' GROUP BY t.typname;
+   ```
+
+   Expected: `enum_products_listing_status = {draft,active,discontinued}` and
+   `enum_products_status = {draft,published}`. If the listing enum is missing or named
+   differently, run one dev push (`npm run dev` pointed at prod, one last time) to align the
+   schema **before** step 2's INSERT/DELETE, or rename the type manually
+   (`ALTER TYPE ... RENAME TO enum_products_listing_status`).
 
 3. **Set SMTP env vars in Vercel production env** (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`,
    `SMTP_PASS`, `EMAIL_FROM_ADDRESS`). `payload.config.ts` now **throws at config evaluation in
@@ -95,7 +111,7 @@ directly from how the adapter works:
 
 4. **Set the Vercel Build Command** (Project Settings → Build & Development) to:
 
-   ```
+   ```bash
    npm run ci
    ```
 
