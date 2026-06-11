@@ -6,6 +6,9 @@ import { ProductCard } from '../../components/product-card'
 import { AnimateOnScroll } from '../../components/animate-on-scroll'
 import type { Product } from '@/payload-types'
 
+// ISR: re-render at most every 5 minutes so CMS edits appear without a redeploy
+export const revalidate = 300
+
 type Props = {
   params: Promise<{ slug: string }>
 }

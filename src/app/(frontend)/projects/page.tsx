@@ -7,6 +7,9 @@ import { getPayloadClient } from '@/lib/payload'
 import { getMediaUrl, getMediaAlt } from '@/lib/media'
 import type { Media, Product } from '@/payload-types'
 
+// ISR: re-render at most every 5 minutes so CMS edits appear without a redeploy
+export const revalidate = 300
+
 export const metadata: Metadata = {
   title: 'Project Gallery | KwikBuilt Homes',
   description:
@@ -28,8 +31,10 @@ const getCachedProjects = unstable_cache(
       return []
     }
   },
+  // Data-layer TTL aligned with the route-level `revalidate = 300` above, which is
+  // what actually triggers the page re-render.
   ['project-gallery-listing'],
-  { revalidate: 60 },
+  { revalidate: 300 },
 )
 
 export default async function ProjectsPage() {

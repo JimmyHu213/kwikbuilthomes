@@ -6,6 +6,9 @@ import { getCachedCategories } from '@/lib/cached-data'
 import { CategoryCard } from '../components/category-card'
 import { AnimateOnScroll } from '../components/animate-on-scroll'
 
+// ISR: re-render at most every 5 minutes so CMS edits appear without a redeploy
+export const revalidate = 300
+
 export const metadata: Metadata = {
   title: 'Products',
   description:

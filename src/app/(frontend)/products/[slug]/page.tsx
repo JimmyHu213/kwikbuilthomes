@@ -15,6 +15,9 @@ import { extractOptionData } from '@/lib/configuration'
 import type { GallerySlide } from '@/lib/gallery'
 import type { Category, Media, Product, Document as PayloadDocument } from '@/payload-types'
 
+// ISR: re-render at most every 5 minutes so CMS edits appear without a redeploy
+export const revalidate = 300
+
 type FloorPlanItem = NonNullable<Product['floorPlans']>[number]
 type CertificationItem = NonNullable<Product['certifications']>[number]
 

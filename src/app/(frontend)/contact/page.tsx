@@ -3,6 +3,9 @@ import { Phone, Mail, MapPin } from 'lucide-react'
 import { getPayloadClient } from '@/lib/payload'
 import { ContactForm } from './contact-form'
 
+// ISR: re-render at most every 5 minutes so CMS edits appear without a redeploy
+export const revalidate = 300
+
 export const metadata: Metadata = {
   title: 'Contact',
   description: 'Get in touch with KwikBuilt Homes — Australian-engineered modular buildings.',
