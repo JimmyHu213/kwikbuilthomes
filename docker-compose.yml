@@ -1,0 +1,27 @@
+# Local development database. Production uses Supabase (configured in Vercel).
+# Usage:
+#   docker compose up -d      # start the dev Postgres
+#   npm run migrate && npm run seed
+#   docker compose down       # stop (data persists in the named volume)
+#   docker compose down -v    # stop and wipe the database
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: kwikbuilt-dev-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kwikbuilt
+      POSTGRES_PASSWORD: kwikbuilt
+      POSTGRES_DB: kwikbuilt_dev
+    ports:
+      - '5432:5432'
+    volumes:
+      - kwikbuilt_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kwikbuilt -d kwikbuilt_dev']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  kwikbuilt_pgdata:
