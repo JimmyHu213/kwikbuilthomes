@@ -2,6 +2,9 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getPayloadClient } from '@/lib/payload'
 
+// ISR: re-render at most every 5 minutes so CMS edits appear without a redeploy
+export const revalidate = 300
+
 export const metadata: Metadata = {
   title: 'About',
   description: 'Learn about KwikBuilt — Australian-engineered modular homes for developers, builders, and sub-distributors.',

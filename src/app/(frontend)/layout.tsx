@@ -4,6 +4,10 @@ import "../globals.css";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
 
+// ISR: the Footer fetches SiteSettings via the CMS — revalidate so header/footer
+// content updates within 5 minutes of an edit without a redeploy
+export const revalidate = 300;
+
 const geistSans = Geist({
 	variable: "--font-geist-sans",
 	subsets: ["latin"],

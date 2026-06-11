@@ -18,6 +18,9 @@ import {
 import type { ComponentType } from 'react'
 import type { Media } from '@/payload-types'
 
+// ISR: re-render at most every 5 minutes so CMS edits appear without a redeploy
+export const revalidate = 300
+
 const iconMap: Record<string, ComponentType<{ className?: string }>> = {
   factory: Factory,
   'shield-check': ShieldCheck,

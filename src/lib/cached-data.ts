@@ -2,6 +2,12 @@ import { unstable_cache } from 'next/cache'
 import { getPayloadClient } from '@/lib/payload'
 import type { Media } from '@/payload-types'
 
+// NOTE: These unstable_cache TTLs only refresh the data-layer cache. What actually
+// triggers a page re-render is the route-level `export const revalidate = 300` (ISR)
+// on each page/layout that consumes these helpers. Keep these TTLs ≤ 300 so a
+// revalidated route picks up fresh CMS data.
+const CACHE_TTL_SECONDS = 300
+
 // Cache SiteContent for 5 minutes — rarely changes
 export const getCachedSiteContent = unstable_cache(
   async () => {
@@ -13,7 +19,7 @@ export const getCachedSiteContent = unstable_cache(
     }
   },
   ['site-content'],
-  { revalidate: 300 },
+  { revalidate: CACHE_TTL_SECONDS },
 )
 
 // Cache SiteSettings for 5 minutes — rarely changes
@@ -27,7 +33,7 @@ export const getCachedSiteSettings = unstable_cache(
     }
   },
   ['site-settings'],
-  { revalidate: 300 },
+  { revalidate: CACHE_TTL_SECONDS },
 )
 
 export type CategoryWithProducts = {
@@ -39,7 +45,7 @@ export type CategoryWithProducts = {
   heroImage?: Media | null
 }
 
-// Cache categories with product data for 1 minute — changes more often
+// Cache categories with product data — aligned with route-level revalidate
 export const getCachedCategories = unstable_cache(
   async (): Promise<CategoryWithProducts[]> => {
     try {
@@ -91,5 +97,5 @@ export const getCachedCategories = unstable_cache(
     }
   },
   ['categories-with-products'],
-  { revalidate: 60 },
+  { revalidate: CACHE_TTL_SECONDS },
 )
