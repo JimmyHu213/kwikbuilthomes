@@ -51,6 +51,7 @@ docs/*
 
 # Bundled Payload config for CLI (generated)
 .payload-config-compiled.mjs
+.seed-compiled.mjs
 
 # OpenNext (Cloudflare build output — not needed for Vercel)
 .open-next/

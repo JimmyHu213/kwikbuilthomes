@@ -26,6 +26,9 @@ const dirname = path.dirname(filename)
 // an ethereal.email TEST account: every email "succeeds" but never reaches a
 // real recipient. Quote confirmations/notifications are the core of this
 // product, so in production we fail hard instead of losing email silently.
+const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL || ''
+const isLocalDatabase = /@(localhost|127\.0\.0\.1)[:/]/.test(databaseUrl)
+
 const smtpHost = process.env.SMTP_HOST
 
 // On Vercel, NODE_ENV is 'production' for preview builds too — gate on VERCEL_ENV
@@ -84,10 +87,10 @@ export default buildConfig({
     push: true,
     migrationDir: path.resolve(dirname, 'migrations'),
     pool: {
-      connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL || '',
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      connectionString: databaseUrl,
+      // Local Postgres (dev) doesn't speak SSL; managed providers (Supabase) require it.
+      // Disable SSL for localhost connections, keep it for everything else.
+      ssl: isLocalDatabase ? false : { rejectUnauthorized: false },
     },
   }),
   // editor: lexicalEditor(), // Disabled — will re-enable when Lexical compatibility is resolved

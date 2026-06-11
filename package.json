@@ -14,6 +14,7 @@
     "migrate": "npm run payload:bundle-config && cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_CONFIG_PATH=.payload-config-compiled.mjs payload migrate",
     "migrate:create": "npm run payload:bundle-config && cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_CONFIG_PATH=.payload-config-compiled.mjs payload migrate:create",
     "migrate:status": "npm run payload:bundle-config && cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_CONFIG_PATH=.payload-config-compiled.mjs payload migrate:status",
+    "seed": "esbuild scripts/seed-entry.ts --bundle --packages=external --format=esm --platform=node --alias:@payload-config=./payload.config.ts --outfile=.seed-compiled.mjs && cross-env NODE_OPTIONS=--no-deprecation node .seed-compiled.mjs",
     "ci": "npm run migrate && next build"
   },
   "dependencies": {
