@@ -46,7 +46,11 @@ src/app/(payload)/admin/importMap.js
 
 # Planning & docs (internal)
 .planning/
-docs/
+docs/*
+!docs/MIGRATIONS.md
+
+# Bundled Payload config for CLI (generated)
+.payload-config-compiled.mjs
 
 # OpenNext (Cloudflare build output — not needed for Vercel)
 .open-next/

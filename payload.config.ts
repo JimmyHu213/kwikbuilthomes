@@ -21,6 +21,31 @@ import { SiteContent } from './src/globals/SiteContent'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// --- Email transport guard ---------------------------------------------------
+// Without transportOptions, @payloadcms/email-nodemailer silently falls back to
+// an ethereal.email TEST account: every email "succeeds" but never reaches a
+// real recipient. Quote confirmations/notifications are the core of this
+// product, so in production we fail hard instead of losing email silently.
+const smtpHost = process.env.SMTP_HOST
+
+if (!smtpHost) {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'SMTP_HOST is not set in a production environment. Refusing to start: ' +
+        'without SMTP transport options, @payloadcms/email-nodemailer silently routes ' +
+        'all email (quote confirmations and notifications) to an ethereal.email test ' +
+        'account while reporting success. Set SMTP_HOST, SMTP_PORT, SMTP_USER and ' +
+        'SMTP_PASS in the environment, then redeploy.',
+    )
+  }
+  // eslint-disable-next-line no-console
+  console.warn(
+    '⚠️  [payload.config] SMTP_HOST is not set — emails will be captured by an ' +
+      'ethereal.email TEST account and will NOT be delivered to real recipients. ' +
+      'Set SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS to send real email in development.',
+  )
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -47,7 +72,10 @@ export default buildConfig({
   collections: [Users, Products, Categories, Media, Documents, Quotes, ProjectGallery],
   globals: [SiteSettings, SiteContent],
   db: postgresAdapter({
+    // `push` only applies in dev mode. Production schema changes are managed
+    // exclusively via migrations in ./migrations — see docs/MIGRATIONS.md.
     push: true,
+    migrationDir: path.resolve(dirname, 'migrations'),
     pool: {
       connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL || '',
       ssl: {
@@ -73,15 +101,22 @@ export default buildConfig({
   email: nodemailerAdapter({
     defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@kwikbuilthomes.com.au',
     defaultFromName: 'Kwik Built Homes',
-    ...(process.env.SMTP_HOST
+    ...(smtpHost
       ? {
           transportOptions: {
-            host: process.env.SMTP_HOST,
+            host: smtpHost,
             port: Number(process.env.SMTP_PORT) || 587,
-            auth: {
-              user: process.env.SMTP_USER,
-              pass: process.env.SMTP_PASS,
-            },
+            // Only include auth when credentials are actually provided —
+            // passing { user: undefined, pass: undefined } breaks transports
+            // that allow unauthenticated relay.
+            ...(process.env.SMTP_USER && process.env.SMTP_PASS
+              ? {
+                  auth: {
+                    user: process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASS,
+                  },
+                }
+              : {}),
           },
         }
       : {}),
