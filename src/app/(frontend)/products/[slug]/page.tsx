@@ -79,6 +79,9 @@ export default async function ProductPage({ params }: Props) {
 
   if (!product) notFound()
 
+  // Draft / discontinued products are not publicly browsable — only 'active' is.
+  if (product.status !== 'active') notFound()
+
   // --- Data extraction ---
   const heroSrc = getMediaUrl(product.heroImage, 'hero') ?? getMediaUrl(product.heroImage)
 

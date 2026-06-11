@@ -88,6 +88,7 @@ export const getCachedCategories = cached(
         }),
         payload.find({
           collection: 'products',
+          where: { status: { equals: 'active' } },
           limit: 200,
           depth: 1,
           sort: '-createdAt',
