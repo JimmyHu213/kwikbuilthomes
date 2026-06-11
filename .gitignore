@@ -62,3 +62,7 @@ docs/*
 # Cloudflare dev vars
 .dev.vars
 .env*.local
+
+# 本地开发上传文件(无 Blob token 时 Payload 存到这里)。生产用 Vercel Blob。
+/media/
+/documents/
