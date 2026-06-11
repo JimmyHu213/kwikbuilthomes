@@ -961,7 +961,7 @@
         },
         "status": {
           "name": "status",
-          "type": "enum_products_status",
+          "type": "enum_products_listing_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
@@ -2008,7 +2008,7 @@
         },
         "version_status": {
           "name": "version_status",
-          "type": "enum__products_v_version_status",
+          "type": "enum_products_listing_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
@@ -5047,12 +5047,13 @@
         "multiple"
       ]
     },
-    "public.enum_products_status": {
-      "name": "enum_products_status",
+    "public.enum_products_listing_status": {
+      "name": "enum_products_listing_status",
       "schema": "public",
       "values": [
         "draft",
-        "published"
+        "active",
+        "discontinued"
       ]
     },
     "public.enum_products_ncc_classification": {
@@ -5086,6 +5087,14 @@
         "BAL-29",
         "BAL-40",
         "BAL-FZ"
+      ]
+    },
+    "public.enum_products_status": {
+      "name": "enum_products_status",
+      "schema": "public",
+      "values": [
+        "draft",
+        "published"
       ]
     },
     "public.enum__products_v_version_gallery_category": {
@@ -5132,14 +5141,6 @@
         "multiple"
       ]
     },
-    "public.enum__products_v_version_status": {
-      "name": "enum__products_v_version_status",
-      "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
-    },
     "public.enum__products_v_version_ncc_classification": {
       "name": "enum__products_v_version_ncc_classification",
       "schema": "public",
@@ -5171,6 +5172,14 @@
         "BAL-29",
         "BAL-40",
         "BAL-FZ"
+      ]
+    },
+    "public.enum__products_v_version_status": {
+      "name": "enum__products_v_version_status",
+      "schema": "public",
+      "values": [
+        "draft",
+        "published"
       ]
     },
     "public.enum_documents_document_type": {
@@ -5283,6 +5292,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "f059cce0-50f1-4d39-a71a-dbf72cf3a68b",
+  "id": "edb66d0f-13b2-4514-a29a-d4878aa52938",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
