@@ -14,7 +14,9 @@ services:
       POSTGRES_PASSWORD: kwikbuilt
       POSTGRES_DB: kwikbuilt_dev
     ports:
-      - '5432:5432'
+      # Bind to loopback only — the dev DB must be reachable from the host app
+      # but never from the local network (creds below are static/throwaway).
+      - '127.0.0.1:5432:5432'
     volumes:
       - kwikbuilt_pgdata:/var/lib/postgresql/data
     healthcheck:
