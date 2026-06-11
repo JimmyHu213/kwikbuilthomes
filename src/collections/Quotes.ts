@@ -8,7 +8,10 @@ export const Quotes: CollectionConfig = {
     group: 'Quotes',
   },
   access: {
-    create: () => true,
+    // Quotes are created via server actions (src/lib/actions/*) through the
+    // Payload Local API, which bypasses access control. Block the public REST API
+    // so submissions can't skip Zod validation.
+    create: () => false,
     read: ({ req: { user } }) => Boolean(user),
     update: ({ req: { user } }) => Boolean(user),
     delete: ({ req: { user } }) => Boolean(user),
