@@ -117,6 +117,11 @@ export default buildConfig({
           vercelBlobStorage({
             enabled: true,
             token: process.env.BLOB_READ_WRITE_TOKEN,
+            // Server-side uploads only. Client-side direct uploads require a
+            // generated importMap entry (VercelBlobClientUploadHandler) that broke
+            // the admin when missing; uploads here are well under Vercel's body
+            // limit, so the server path is fine and avoids that fragility.
+            clientUploads: false,
             collections: {
               media: true,
               documents: true,
