@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Category, Media } from '@/payload-types'
 
 type CategoryCardProps = {
@@ -15,9 +16,12 @@ export function CategoryCard({ category, productCount, heroImage }: CategoryCard
     >
       {/* Background image or gradient */}
       {heroImage?.url ? (
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-          style={{ backgroundImage: `url(${heroImage.sizes?.card?.url ?? heroImage.url})` }}
+        <Image
+          src={heroImage.sizes?.card?.url ?? heroImage.url}
+          alt={heroImage.alt ?? category.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-[#2D2D2D] to-[#4a4a4a]" />
