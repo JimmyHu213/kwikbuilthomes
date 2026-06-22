@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { formatPrice } from '@/lib/format'
 import type { Product, Media } from '@/payload-types'
 
@@ -27,16 +28,20 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="relative overflow-hidden">
         {heroImage ? (
           <div className="relative aspect-[4/3]">
-            <img
+            <Image
               src={heroImage.sizes?.card?.url ?? heroImage.url ?? ''}
               alt={heroImage.alt ?? product.title}
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${secondImage ? 'group-hover:opacity-0' : ''}`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              className={`object-cover transition-opacity duration-500 ${secondImage ? 'group-hover:opacity-0' : ''}`}
             />
             {secondImage && (
-              <img
+              <Image
                 src={secondImage.sizes?.card?.url ?? secondImage.url ?? ''}
                 alt={secondImage.alt ?? product.title}
-                className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                className="object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               />
             )}
           </div>
