@@ -103,7 +103,9 @@ export default async function HomePage() {
     : defaultStats
 
   const videoUrl = getMediaUrl(siteContent?.heroVideo as SiteContentHomepage['heroVideo'])
-  const posterUrl = getMediaUrl(siteContent?.heroPoster as SiteContentHomepage['heroPoster'])
+  // Use the generated 1920px `hero` size for the poster instead of the original
+  // full-resolution upload — the poster is the homepage LCP element.
+  const posterUrl = getMediaUrl(siteContent?.heroPoster as SiteContentHomepage['heroPoster'], 'hero')
 
   return (
     <div>
