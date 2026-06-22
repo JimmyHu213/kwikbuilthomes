@@ -19,6 +19,10 @@ export function ProductCard({ product }: ProductCardProps) {
     .filter((item) => item.image && typeof item.image === 'object' && (item.image as Media).url)
   const secondImage = galleryImages.length > 0 ? (galleryImages[0].image as Media) : null
 
+  // heroImage may be a populated Media object that still lacks a usable URL;
+  // next/image throws on an empty src, so resolve it up front and gate on it.
+  const heroImageUrl = heroImage?.sizes?.card?.url ?? heroImage?.url ?? ''
+
   return (
     <Link
       href={`/products/${product.slug}`}
@@ -26,10 +30,10 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       {/* Image area */}
       <div className="relative overflow-hidden">
-        {heroImage ? (
+        {heroImage && heroImageUrl ? (
           <div className="relative aspect-[4/3]">
             <Image
-              src={heroImage.sizes?.card?.url ?? heroImage.url ?? ''}
+              src={heroImageUrl}
               alt={heroImage.alt ?? product.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
