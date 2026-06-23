@@ -147,6 +147,20 @@ describe('quoteFormSchema', () => {
     expect(result.success).toBe(true)
   })
 
+  it('accepts null for absent optional fields (FormData.get returns null)', () => {
+    // The action reads conditionally-rendered inputs via formData.get(), which
+    // returns null -- not undefined -- when the input is absent from the DOM
+    // (e.g. siteAddress/modelMix when the estate section is collapsed).
+    const nonEstateSubmission = {
+      ...validSubmission,
+      isEstateInquiry: false,
+      siteAddress: null,
+      modelMix: null,
+    }
+    const result = quoteFormSchema.safeParse(nonEstateSubmission)
+    expect(result.success).toBe(true)
+  })
+
   it('selectedOptions string is parsed as JSON', () => {
     const result = quoteFormSchema.parse(validSubmission)
     expect(result.selectedOptions).toEqual({ cladding: ['timber'] })
