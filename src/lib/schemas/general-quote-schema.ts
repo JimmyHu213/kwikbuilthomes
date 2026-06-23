@@ -38,8 +38,11 @@ export const generalQuoteFormSchema = z.object({
   projectTimeline: z.enum(timelineOptions).optional(),
   isEstateInquiry: z.coerce.boolean().default(false),
   numberOfUnits: z.coerce.number().int().min(2).optional(),
-  siteAddress: z.string().optional(),
-  modelMix: z.string().optional(),
+  // siteAddress/modelMix inputs only render when the estate section is open, so
+  // the action's formData.get() yields null (not undefined) when collapsed.
+  // Use nullish() so that null passes validation as "not provided".
+  siteAddress: z.string().nullish(),
+  modelMix: z.string().nullish(),
   additionalNotes: z.string().optional(),
 })
 
